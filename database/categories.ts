@@ -18,6 +18,16 @@ const getCategories = unstable_cache(
   { tags: ["categories"] }
 );
 
+const getCategoryById = async (id: string) => {
+  try {
+    const category = await prisma.category.findUnique({ where: { id } });
+    if (!category) undefined;
+    return category;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 const createCategory = async ({
   image,
   title,
@@ -89,4 +99,10 @@ const deleteCategory = async (id: string): Promise<{ message: string }> => {
   }
 };
 
-export { getCategories, createCategory, updateCategory, deleteCategory };
+export {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getCategoryById,
+};
