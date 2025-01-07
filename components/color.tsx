@@ -1,11 +1,16 @@
 import { cn } from "@/lib/utils";
 import { ColorShceme } from "@prisma/client";
+import { ReactNode } from "react";
 
 const Color = ({
   color,
   name,
   className,
-}: Omit<ColorShceme, "productId"> & { className?: string }) => {
+  children,
+}: Omit<ColorShceme, "productId"> & {
+  className?: string;
+  children?: ReactNode;
+}) => {
   return (
     <div
       style={{
@@ -19,6 +24,7 @@ const Color = ({
       )}
     >
       {!color && name}
+      {children}
     </div>
   );
 };

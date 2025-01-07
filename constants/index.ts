@@ -28,4 +28,4 @@ export const imgPreview = {
     "https://images.unsplash.com/photo-1469212044023-0e55b4b9745a?q=80&w=1200&auto=format",
 };
 
-export const defaultSize = "افتراضي";
+export const defaultSize = "الإفتراضي";
