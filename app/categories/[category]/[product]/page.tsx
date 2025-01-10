@@ -13,7 +13,6 @@ import { getCategoryById } from "@/database/categories";
 import ThumnailSlider from "./components/product-carsouel";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
-import Color from "@/components/color";
 import { defaultSize } from "@/constants";
 import ColorSelector from "./components/color-selector";
 
@@ -43,12 +42,6 @@ const page = async ({
   ];
   const sizes = product.colorShcemes
     .map((color) => color.sizes.map((size) => size))
-    .flat();
-  console.log(sizes);
-  const sizesLength = product.colorShcemes
-    .map(
-      (color) => color.sizes.filter((size) => size.title !== defaultSize) // Filter out sizes with the title 'some_value'
-    )
     .flat();
 
   return (
@@ -94,25 +87,11 @@ const page = async ({
             </span>
           </div>
           <p className="text-foreground/70 text-sm">{product.description}</p>
-          {/* <Separator className="bg-foreground/20 my-2" />
-          <Label>اختر لوناً</Label>
-          <div className="flex gap-2">
-            {product.colorShcemes.map((color, index) => (
-              <Color key={index} className="w-8 h-8" {...color} />
-            ))}
-          </div> */}
-          <ColorSelector colors={product.colorShcemes} />
-          {sizesLength.length > 0 && (
-            <>
-              <Separator className="bg-foreground/20 my-2" />
-              <Label>اختر حجمً</Label>
-              <div className="flex text-base gap-2">
-                {sizes.map((size, idx) => (
-                  <div key={idx}>{size.title}</div>
-                ))}
-              </div>
-            </>
-          )}
+          <ColorSelector
+            link={`/${categoryId}/${productId}`}
+            sizes={sizes}
+            colors={product.colorShcemes}
+          />
         </div>
       </div>
     </main>

@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "i9bbevj39x.ufs.sh",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   webpack: (config) => {
