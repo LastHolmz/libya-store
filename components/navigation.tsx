@@ -13,14 +13,19 @@ interface TabLinkProps {
 export default function NavigationTabs({
   children,
   className,
+  scrollClassName,
 }: {
   children: React.ReactNode;
   className?: string;
+  scrollClassName?: string;
 }) {
   return (
     <ScrollArea
       dir="rtl"
-      className="w-full max-w-full whitespace-nowrap min-h-full h-11 bg-secondary"
+      className={cn(
+        "w-full max-w-full whitespace-nowrap min-h-full h-11 bg-secondary",
+        scrollClassName
+      )}
     >
       <div className="flex h-max w-max">
         <nav

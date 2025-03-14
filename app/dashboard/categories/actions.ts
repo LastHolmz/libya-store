@@ -13,7 +13,7 @@ export async function createCategoryAction(
     const schema = z.object({
       title: z.string(),
       slug: z.string(),
-      image: z.string().nullable().optional(),
+      image: z.string().min(4),
     });
 
     const data = schema.safeParse({
@@ -55,7 +55,7 @@ export async function updateCategoryAction(
       title: z.string(),
       id: z.string(),
 
-      image: z.string().nullable().optional(),
+      image: z.string().min(4),
     });
 
     const data = schema.safeParse({

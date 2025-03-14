@@ -28,6 +28,9 @@ import { FaPlus, FaTrash } from "react-icons/fa6";
 import React from "react";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { Pencil, Trash } from "lucide-react";
+import { ResponsiveDialogWithCustomOpenFuncionality } from "@/components/responsive-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "@/hooks/use-toast";
 
 export const CreateProductForm = ({
   categories,
@@ -599,5 +602,88 @@ export const DeleteExtensionOfProductForm = ({
     >
       <Input type="hidden" name="id" value={id} />
     </AccessibleDialogForm>
+  );
+};
+
+export const ShareProductForm = ({
+  categoryId,
+  productId,
+}: {
+  productId: string;
+  categoryId: string;
+}) => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [header, setHeader] = useState<boolean>(true);
+  const [footer, setFooter] = useState<boolean>(true);
+  const [related, setRelated] = useState<boolean>(true);
+  const [cart, setCart] = useState<boolean>(true);
+
+  const handleCopyLink = () => {
+    const link = `$/categories/${categoryId}/${productId}?header=${header}&footer=${footer}&related=${related}&cart=${cart}`;
+    navigator.clipboard.writeText(link);
+    toast({
+      className: "bg-primary text-white",
+      description: "تم نسخ الرابط بنجاح",
+    });
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+  };
+
+  return (
+    <ResponsiveDialogWithCustomOpenFuncionality
+      open={open}
+      setOpen={setOpen}
+      trigger={<button>مشاركة</button>}
+      title="مشاركة المنتج"
+      description="اختيار شكل صفحة الهبوط للمنتج"
+    >
+      <div className="grid gap-4">
+        <div className="flex items-center justify-between">
+          <label htmlFor="header" className="text-sm font-medium">
+            إظهار رأس الصفحة
+          </label>
+          <Checkbox
+            id="header"
+            checked={header}
+            onCheckedChange={(checked) => setHeader(checked === true)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <label htmlFor="footer" className="text-sm font-medium">
+            إظهار ذيل الصفحة
+          </label>
+          <Checkbox
+            id="footer"
+            checked={footer}
+            onCheckedChange={(checked) => setFooter(checked === true)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <label htmlFor="related" className="text-sm font-medium">
+            إظهار المنتجات الشابهة
+          </label>
+          <Checkbox
+            id="related"
+            checked={related}
+            onCheckedChange={(checked) => setRelated(checked === true)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <label htmlFor="cart" className="text-sm font-medium">
+            إظهار السلة
+          </label>
+          <Checkbox
+            id="cart"
+            checked={cart}
+            onCheckedChange={(checked) => setCart(checked === true)}
+          />
+        </div>
+
+        <Button className="w-full" onClick={handleCopyLink}>
+          نسخ الرابط
+        </Button>
+      </div>
+    </ResponsiveDialogWithCustomOpenFuncionality>
   );
 };

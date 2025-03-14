@@ -46,7 +46,7 @@ model Category {
   id      String    @id @default(auto()) @map("_id") @db.ObjectId
   title   String
   slug    String    @unique
-  image   String?
+  image   String
   Product Product[]
 }
 

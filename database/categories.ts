@@ -7,7 +7,11 @@ import { revalidateTag, unstable_cache } from "next/cache";
 const getCategories = unstable_cache(
   async () => {
     try {
-      const categories = await prisma.category.findMany({});
+      const categories = await prisma.category.findMany({
+        include: {
+          _count: true,
+        },
+      });
       if (!categories) return [];
       return categories;
     } catch (error) {
@@ -32,7 +36,7 @@ const createCategory = async ({
   image,
   title,
   slug,
-}: Omit<Category, "id" | "productIDs" | "image"> & {
+}: Omit<Category, "id" | "productIDs"> & {
   image?: string | null;
 }): Promise<{ message: string }> => {
   try {
@@ -60,7 +64,7 @@ const updateCategory = async ({
   image,
   title,
   id,
-}: Omit<Category, "productIDs" | "image" | "slug"> & {
+}: Omit<Category, "productIDs" | "slug"> & {
   image?: string | null;
 }): Promise<{ message: string }> => {
   try {

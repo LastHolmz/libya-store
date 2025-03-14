@@ -17,6 +17,7 @@ import { Product } from "@prisma/client";
 import NotFoundTable from "@/components/not-found-table";
 import Image from "next/image";
 import Link from "next/link";
+import { ShareProductForm } from "./forms";
 export interface Props extends Product {
   category: {
     id: string;
@@ -159,6 +160,12 @@ export const productsTable: ColumnDef<Props>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>الأحداث</DropdownMenuLabel>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <ShareProductForm
+                categoryId={product.categoryId}
+                productId={product.id}
+              />{" "}
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 navigator.clipboard.writeText(String(product.barcode));
@@ -170,10 +177,12 @@ export const productsTable: ColumnDef<Props>[] = [
             >
               نسح الباركود
             </DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Link href={`/dashboard/inventory/${product.id}`}>معلومات</Link>
             </DropdownMenuItem>
+            {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
