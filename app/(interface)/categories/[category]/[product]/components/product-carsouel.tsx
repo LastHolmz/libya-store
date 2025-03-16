@@ -5,7 +5,6 @@ import Carousel, {
   ThumsSlider,
 } from "@/components/carsouel";
 import Image from "next/image";
-import { imgPreview } from "@/constants";
 
 function ThumnailSlider({
   images,
@@ -20,7 +19,9 @@ function ThumnailSlider({
   };
   if (images.length < 1) return <></>;
   return (
-    <div className="bg-background w-full mx-auto">
+    <div className="bg-background w-full mx-auto" style={{ height: "400px" }}>
+      {" "}
+      {/* Fixed height */}
       <Carousel options={OPTIONS} className="relative" isAutoPlay={true}>
         <SliderContainer className="gap-2">
           {images.map((image, index) => (

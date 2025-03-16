@@ -21,6 +21,7 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import ClassNames from "embla-carousel-class-names";
 import { cn } from "@/lib/utils";
+
 type UseDotButtonType = {
   selectedIndex: number;
   scrollSnaps: number[];
@@ -35,10 +36,12 @@ interface CarouselProps {
   isAutoPlay?: boolean;
   isScale?: boolean;
 }
+
 interface ThumbnailSlide {
   src: string;
   alt: string;
 }
+
 interface CarouselContextType {
   prevBtnDisabled: boolean;
   nextBtnDisabled: boolean;
@@ -65,6 +68,7 @@ const TWEEN_FACTOR_BASE = 0.52;
 
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
+
 export const useCarouselContext = () => {
   const context = useContext(CarouselContext);
   if (!context) {
@@ -102,6 +106,7 @@ const Carousel: React.FC<CarouselProps> = ({
       })
     );
   }
+
   const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
   const [selectedThumbIndex, setSelectedThumbIndex] = useState(0);
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
@@ -119,7 +124,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const onSelect = useCallback(() => {
     if (!emblaApi || !emblaThumbsApi) return;
-    setSelectedThumbIndex(emblaApi.selectedScrollSnap()); // Use setSelectedThumbIndex here
+    setSelectedThumbIndex(emblaApi.selectedScrollSnap());
     emblaThumbsApi.scrollTo(emblaApi.selectedScrollSnap());
   }, [emblaApi, emblaThumbsApi, setSelectedThumbIndex]);
 
@@ -144,19 +149,20 @@ const Carousel: React.FC<CarouselProps> = ({
     const progress = Math.max(0, Math.min(1, emblaApi.scrollProgress()));
     setScrollProgress(progress * 100);
   }, []);
+
   useEffect(() => {
     if (!emblaApi) return;
-
     onScroll(emblaApi);
     emblaApi.on("reInit", onScroll);
     emblaApi.on("scroll", onScroll);
   }, [emblaApi, onScroll]);
+
   const { selectedSnap, snapCount } = useSelectedSnapDisplay(emblaApi);
 
-  // for scale animation
-
+  // For scale animation
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<HTMLElement[]>([]);
+
   const setTweenNodes = useCallback(
     (emblaApi: EmblaCarouselType): void => {
       if (!isScale) return;
@@ -215,7 +221,6 @@ const Carousel: React.FC<CarouselProps> = ({
           const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current);
           const scale = numberWithinRange(tweenValue, 0, 1).toString();
           const tweenNode = tweenNodes.current[slideIndex];
-          // Add null check here
           if (tweenNode) {
             tweenNode.style.transform = `scale(${scale})`;
           }
@@ -239,6 +244,7 @@ const Carousel: React.FC<CarouselProps> = ({
         .on("scroll", tweenScale);
     }
   }, [emblaApi, tweenScale, isScale, setTweenNodes, setTweenFactor]);
+
   return (
     <CarouselContext.Provider
       value={{
@@ -261,9 +267,11 @@ const Carousel: React.FC<CarouselProps> = ({
       }}
     >
       <div
-        className={cn(className, "overflow-hidden  rounded-md ")}
+        className={cn(className, "overflow-hidden rounded-md")}
         ref={emblaRef}
+        style={{ scrollBehavior: "smooth", overflowAnchor: "none" }}
       >
+        {/* Smooth scrolling and disable scroll anchoring */}
         {children}
       </div>
     </CarouselContext.Provider>
@@ -292,17 +300,16 @@ export const SliderContainer = ({
     </div>
   );
 };
+
 export const Slider: React.FC<SliderProps> = ({
   children,
   className,
   thumnailSrc,
 }) => {
   const { isScale, setSlidesArr } = useCarouselContext();
-  // console.log(thumnailSrc)
 
   const addImgToSlider = useCallback(() => {
     setSlidesArr((prev: any) => {
-      // Prevent adding duplicate images
       return [...prev, thumnailSrc];
     });
   }, [setSlidesArr, thumnailSrc]);
@@ -311,8 +318,14 @@ export const Slider: React.FC<SliderProps> = ({
     addImgToSlider();
   }, [addImgToSlider]);
 
+  {
+    /* Disable focus */
+  }
   return (
-    <div className={cn("min-w-0 flex-grow-0 flex-shrink-0", className)}>
+    <div
+      tabIndex={-1}
+      className={cn("min-w-0 flex-grow-0 flex-shrink-0", className)}
+    >
       {isScale ? (
         <>
           <div className="slider_content">{children}</div>
@@ -362,6 +375,7 @@ export const useDotButton = (
     onDotButtonClick,
   };
 };
+
 type UsePrevNextButtonsType = {
   prevBtnDisabled: boolean;
   nextBtnDisabled: boolean;
@@ -439,7 +453,6 @@ export const useSelectedSnapDisplay = (
 export const ThumsSlider: React.FC = () => {
   const { emblaThumbsRef, slidesrArr, selectedIndex, onThumbClick } =
     useCarouselContext();
-  // console.log(slidesrArr);
 
   return (
     <div className="overflow-hidden mt-2" ref={emblaThumbsRef}>
@@ -468,4 +481,5 @@ export const ThumsSlider: React.FC = () => {
     </div>
   );
 };
+
 export default Carousel;
