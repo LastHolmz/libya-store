@@ -31,6 +31,7 @@ import { Pencil, Trash } from "lucide-react";
 import { ResponsiveDialogWithCustomOpenFuncionality } from "@/components/responsive-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
+import uri from "@/lib/uri";
 
 export const CreateProductForm = ({
   categories,
@@ -619,7 +620,7 @@ export const ShareProductForm = ({
   const [cart, setCart] = useState<boolean>(true);
 
   const handleCopyLink = () => {
-    const link = `$/categories/${categoryId}/${productId}?header=${header}&footer=${footer}&related=${related}&cart=${cart}`;
+    const link = `${uri}/categories/${categoryId}/${productId}?header=${header}&footer=${footer}&related=${related}&cart=${cart}`;
     navigator.clipboard.writeText(link);
     toast({
       className: "bg-primary text-white",

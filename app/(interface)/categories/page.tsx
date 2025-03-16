@@ -1,13 +1,35 @@
 import { getCategories } from "@/database/categories";
 import Categories from "../components/categories";
 import Header from "../components/header";
-
+import Footer from "../components/footer";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import Link from "next/link";
 const page = async () => {
   const categories = await getCategories();
   return (
-    <main>
+    <div>
       <Header />
-      <div className="bg-secondary min-h-full">
+      <main className="bg-secondary min-h-full">
+        <Breadcrumb className="container" dir="rtl">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href={`/`}>الرئيسية</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>الأصناف</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <section className="py-12 md:py-16">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col items-center text-center">
@@ -22,8 +44,9 @@ const page = async () => {
             <Categories categories={categories} />
           </div>
         </section>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

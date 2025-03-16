@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { defaultSize } from "@/constants";
 import ColorSelector from "./components/color-selector";
 import Header from "@/app/(interface)/components/header";
+import Footer from "@/app/(interface)/components/footer";
 
 // export const generatestaticparams = async () => {
 //   const products = await getProducts({});
@@ -29,9 +30,10 @@ const page = async ({
   searchParams,
 }: {
   params: Promise<{ category: string; product: string }>;
-  searchParams?: Promise<{ header?: string }>;
+  searchParams?: Promise<{ header?: string; footer?: string }>;
 }) => {
   const header = (await searchParams)?.header;
+  const footer = (await searchParams)?.footer;
 
   const { category: categoryId, product: productId } = await params;
   const product = await getProductById(productId);
@@ -53,7 +55,7 @@ const page = async ({
     <div>
       {header && header === "false" ? null : <Header />}
       <main className="bg-secondary min-h-screen">
-        <Breadcrumb className="my-2" dir="rtl">
+        <Breadcrumb className="container" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
@@ -109,6 +111,7 @@ const page = async ({
           </div>
         </div>
       </main>
+      {footer && footer === "false" ? null : <Footer />}
     </div>
   );
 };

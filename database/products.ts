@@ -57,13 +57,14 @@ const deleteColor = async ({ id }: { id: string }) => {
 };
 
 const getProducts = unstable_cache(
-  async ({ title }: { title?: string }) => {
+  async ({ title, categoryId }: { title?: string; categoryId?: string }) => {
     try {
       const products = await prisma.product.findMany({
         where: {
           title: {
             contains: title,
           },
+          categoryId,
         },
         orderBy: {
           createdAt: "desc",
