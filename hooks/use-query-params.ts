@@ -1,12 +1,40 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function useQueryParam() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const scrollPosition = useRef(0);
+
+  // Save the current scroll position before the URL changes
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      scrollPosition.current = window.scrollY;
+    };
+
+    const handleRouteChangeComplete = () => {
+      window.scrollTo(0, scrollPosition.current);
+    };
+
+    const handleRouteChangeError = () => {
+      window.scrollTo(0, scrollPosition.current);
+    };
+
+    // Attach event listeners
+    window.addEventListener("beforeunload", handleRouteChangeStart);
+    window.addEventListener("load", handleRouteChangeComplete);
+    window.addEventListener("error", handleRouteChangeError);
+
+    return () => {
+      // Clean up event listeners
+      window.removeEventListener("beforeunload", handleRouteChangeStart);
+      window.removeEventListener("load", handleRouteChangeComplete);
+      window.removeEventListener("error", handleRouteChangeError);
+    };
+  }, []);
 
   /**
    * Deletes specified query parameters from the URL.
@@ -20,7 +48,7 @@ export default function useQueryParam() {
         params.delete(key);
       });
 
-      replace(`${pathname}?${params.toString()}`);
+      replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
     [searchParams, pathname, replace]
   );
@@ -39,7 +67,7 @@ export default function useQueryParam() {
         }
       });
 
-      replace(`${pathname}?${params.toString()}`);
+      replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
     [searchParams, pathname, replace]
   );
@@ -61,7 +89,7 @@ export default function useQueryParam() {
         params.set(key, value);
       }
 
-      replace(`${pathname}?${params.toString()}`);
+      replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
     [searchParams, pathname, replace]
   );
