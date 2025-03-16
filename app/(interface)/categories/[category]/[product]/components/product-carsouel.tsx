@@ -5,7 +5,6 @@ import Carousel, {
   ThumsSlider,
 } from "@/components/carsouel";
 import Image from "next/image";
-
 function ThumnailSlider({
   images,
   title = "product-image",
@@ -36,7 +35,7 @@ function ThumnailSlider({
                 height={800}
                 alt="image"
                 priority
-                className="h-full object-cover rounded-lg w-full"
+                className="h-full lg:object-contain object-cover rounded-lg w-full"
               />
             </Slider>
           ))}
@@ -46,5 +45,4 @@ function ThumnailSlider({
     </div>
   );
 }
-
 export default ThumnailSlider;

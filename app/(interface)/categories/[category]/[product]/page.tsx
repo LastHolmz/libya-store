@@ -83,7 +83,7 @@ const page = async ({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="flex bg-background py-10 phone-only:py-4 shadow-lg rounded-lg phone-only:flex-col container mt-10 items-start justify-between phone-only:gap-5 gap-10">
+        <div className="flex bg-background pt-10 pb-24 phone-only:py-4 shadow-lg rounded-lg phone-only:flex-col container mt-10 items-start justify-between phone-only:gap-5 gap-10">
           <div dir="ltr" className="md:w-2/3 w-full">
             <ThumnailSlider images={images} />
           </div>

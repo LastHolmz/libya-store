@@ -21,12 +21,12 @@ export const ProductCard = ({ product }: { product: Product }) => {
             className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <CustomLink
+          {/* <CustomLink
             href={link}
             className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground absolute left-2 top-2 bg-background/80 backdrop-blur-sm"
           >
             صوتيات
-          </CustomLink>
+          </CustomLink> */}
           <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80 absolute right-2 top-2 bg-destructive text-destructive-foreground">
             خصم 20%
           </div>
@@ -42,7 +42,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
             href={link}
             className="line-clamp-2 text-base font-medium transition-colors group-hover:text-primary"
           >
-            سماعات لاسلكية فاخرة
+            {product.title}{" "}
           </Link>
 
           <div className="mt-2 flex items-center gap-1.5">
