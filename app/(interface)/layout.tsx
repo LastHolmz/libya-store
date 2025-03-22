@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import Header from "./components/header";
+import { CartProvider } from "@/context/CartContext";
 
 const layout = async ({
   children,
@@ -9,7 +10,11 @@ const layout = async ({
   // searchParams?: Promise<{ header?: string }>;
 }) => {
   // const header = (await searchParams)?.header;
-  return <div>{children}</div>;
+  return (
+    <div>
+      <CartProvider>{children}</CartProvider>
+    </div>
+  );
 };
 
 export default layout;

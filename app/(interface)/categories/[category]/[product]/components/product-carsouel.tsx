@@ -18,7 +18,7 @@ function ThumnailSlider({
   };
   if (images.length < 1) return <></>;
   return (
-    <div className="bg-background w-full mx-auto" style={{ height: "400px" }}>
+    <div className="w-full mx-auto" style={{ height: "400px" }}>
       {" "}
       {/* Fixed height */}
       <Carousel options={OPTIONS} className="relative" isAutoPlay={true}>

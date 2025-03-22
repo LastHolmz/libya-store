@@ -12,8 +12,12 @@ import Link from "next/link";
 import { getCategoryById } from "@/database/categories";
 import ThumnailSlider from "./components/product-carsouel";
 import { Separator } from "@/components/ui/separator";
-import { Label } from "@/components/ui/label";
-import { defaultSize } from "@/constants";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import ColorSelector from "./components/color-selector";
 import Header from "@/app/(interface)/components/header";
 import Footer from "@/app/(interface)/components/footer";
@@ -30,10 +34,11 @@ const page = async ({
   searchParams,
 }: {
   params: Promise<{ category: string; product: string }>;
-  searchParams?: Promise<{ header?: string; footer?: string }>;
+  searchParams?: Promise<{ header?: string; footer?: string; buynow?: string }>;
 }) => {
   const header = (await searchParams)?.header;
   const footer = (await searchParams)?.footer;
+  const buynow = (await searchParams)?.buynow ?? "false";
 
   const { category: categoryId, product: productId } = await params;
   const product = await getProductById(productId);
@@ -52,10 +57,10 @@ const page = async ({
     .flat();
 
   return (
-    <div>
+    <div className="relative ">
       {header && header === "false" ? null : <Header />}
-      <main className="bg-secondary min-h-screen">
-        <Breadcrumb className="container" dir="rtl">
+      <main className="  min-h-screen">
+        <Breadcrumb className="container my-2" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
@@ -83,7 +88,7 @@ const page = async ({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="flex bg-background pt-10 pb-24 phone-only:py-4 shadow-lg rounded-lg phone-only:flex-col container mt-10 items-start justify-between phone-only:gap-5 gap-10">
+        <div className="flex my-10  phone-only:flex-col phone-only:px-2 mx-auto md:container items-start justify-between phone-only:gap-5 gap-10">
           <div dir="ltr" className="md:w-2/3 w-full">
             <ThumnailSlider images={images} />
           </div>
@@ -107,7 +112,35 @@ const page = async ({
               link={`/${categoryId}/${productId}`}
               sizes={sizes}
               colors={product.colorShcemes}
+              buyNow={buynow === "true"}
+              product={product}
             />
+            <Separator />
+
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>الدفع عند التسليم</AccordionTrigger>
+                <AccordionContent>
+                  تختلف أوقات الشحن لأننا نقوم بالشحن على مستوى العالم من مراكز
+                  وفاء مختلفة بناءً على موقعك. متوسط وقت الشحن هو حوالي 7 إلى 20
+                  يوم عمل. سيتم تحديث رقم تتبعك خلال 3-7 أيام بعد شحن طلبك.{" "}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>سياسة الإرجاع</AccordionTrigger>
+                <AccordionContent>
+                  ضمان إرجاع أو رد الأموال لمدة 30 يومًا. هذا يؤهلك للمطالبة برد
+                  أو تبادل خلال 30 يومًا من استلام سلعك. لتقديم مطالبة، اتصل بنا
+                  على support@yourstore.com
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger>خدمة العملاء</AccordionTrigger>
+                <AccordionContent>
+                  فريق خدمة العملاء لدينا هنا دائمًا إذا كنت بحاجة إلى مساعدة.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </main>

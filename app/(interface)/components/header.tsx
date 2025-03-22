@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
+import { CartSheet } from "./cart-sheet";
 
 const Header = () => {
   return (
@@ -43,9 +44,10 @@ const Header = () => {
             <Input placeholder="ابحث هنا" className="lg:min-w-80 max-w-sm" />
           </div>
           <div className="flex gap-1">
-            <Button variant={"ghost"} size={"icon"}>
+            <CartSheet />
+            {/* <Button variant={"ghost"} size={"icon"}>
               <CiShoppingCart />
-            </Button>
+            </Button> */}
             <Button variant={"ghost"} size={"icon"}>
               <FaRegUserCircle />
             </Button>

@@ -9,10 +9,12 @@ import { Separator } from "@/components/ui/separator";
 import useQueryParam from "@/hooks/use-query-params";
 import sizeNames from "@/lib/size-names";
 import { cn } from "@/lib/utils";
-import { Size } from "@prisma/client";
+import { Product, Size } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdDone } from "react-icons/md";
+import CartAndBuy from "./cart";
+import { useCart } from "@/context/CartContext";
 
 interface Color {
   sizes: Size[];
@@ -22,7 +24,7 @@ interface Color {
   image: string | null;
 }
 
-interface CustomSize {
+export interface CustomSize {
   id: string;
   title: string | null;
   qty: number;
@@ -33,10 +35,14 @@ const ColorSelector = ({
   colors,
   sizes,
   link,
+  buyNow,
+  product,
 }: {
   colors: Color[];
   sizes: CustomSize[];
   link: string;
+  buyNow: boolean;
+  product: Product;
 }) => {
   const { setQueryParam, deleteQueryParam } = useQueryParam();
   const searchParams = useSearchParams();
@@ -46,8 +52,16 @@ const ColorSelector = ({
   );
   const [selectedSize, setSelectedSize] = useState<CustomSize | null>(null);
   const [sizesToColor, setSizesToColor] = useState<CustomSize[]>([]);
+
+  const { updateQuantity, addToCart, findCartItemBySizeId, removeFromCart } =
+    useCart();
+
+  const [currentCartItem, setCurrentCartItem] = useState(
+    findCartItemBySizeId(selectedSize?.id ?? "", currentColor)
+  );
+
   const [quantity, setQuantity] = useState<number>(
-    Number(searchParams.get("qty")) || 0
+    currentCartItem?.quantity ?? (Number(searchParams.get("qty")) || 0)
   );
 
   // Get the maximum available quantity for the selected size or color
@@ -71,14 +85,40 @@ const ColorSelector = ({
     const maxQty = getMaxQuantity();
     if (quantity < maxQty) {
       setQuantity((prev) => prev + 1);
-      setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
+      // setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
+      addToCart({
+        colorShcemeId: currentColor,
+        image:
+          colors.find((color) => color.id === currentColor)?.image ??
+          product.image,
+        price: product.price,
+        productId: product.id,
+        quantity: 1,
+        title: product.title,
+        hexOfColor:
+          colors.find((color) => color.id === currentColor)?.color ?? "#000",
+        sizeId: selectedSize?.id || "",
+        nameOfColor:
+          colors.find((color) => color.id === currentColor)?.name || "",
+      });
     }
   };
 
   // Handle decrement
   const decrement = () => {
-    setQuantity((prev) => (prev > 0 ? prev - 1 : 0)); // Prevent negative values
-    setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
+    setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
+    if (currentCartItem?.quantity) {
+      // setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
+      if (currentCartItem.quantity === 1) {
+        removeFromCart(product.id, currentColor, selectedSize?.id || "");
+      }
+      updateQuantity(
+        product.id,
+        currentColor,
+        selectedSize?.id || "",
+        currentCartItem.quantity - 1
+      );
+    }
   };
 
   // Handle input change
@@ -146,6 +186,12 @@ const ColorSelector = ({
     }
   }, [currentColor, sizes]);
 
+  useEffect(() => {
+    setCurrentCartItem(
+      findCartItemBySizeId(selectedSize?.id ?? "", currentColor)
+    );
+  }, [selectedSize, currentColor, increment, decrement]);
+
   // Check if all sizes for the selected color have titles in the excluded list
   const shouldShowSizeSelector = sizesToColor.some(
     (size) => !sizeNames.includes(size.title || "")
@@ -155,7 +201,7 @@ const ColorSelector = ({
     <div className="grid gap-4 text-start w-full">
       <Separator className="bg-foreground/20 my-2" />
       <Label>اختر لوناً</Label>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         {colors.map((color, index) => {
           const number = color.sizes.reduce(
             (sizeAcc, size) => sizeAcc + size.qty,
@@ -193,23 +239,29 @@ const ColorSelector = ({
         <>
           <Separator className="bg-foreground/20 my-2" />
           <Label>اختر حجمً</Label>
-          <div className="flex text-base gap-2">
+          <div className="flex flex-wrap text-base gap-2">
             {sizesToColor
               .filter((size) => !sizeNames.includes(size.title || "")) // Exclude sizes with titles in the excluded list
               .map((size, idx) => (
                 <Button
                   disabled={size.colorShcemeId !== currentColor || size.qty < 1}
-                  variant={selectedSize?.id === size.id ? "default" : "outline"}
+                  variant={
+                    selectedSize?.id === size.id ? "default" : "secondary"
+                  }
                   className={cn(
-                    "rounded-lg relative",
+                    "rounded-[62px] transition-all duration-500  px-6 relative overflow-hidden",
                     size.qty < 1 && "cursor-not-allowed"
+                    // selectedSize?.id === size.id && ""
                   )}
                   key={idx}
                   onClick={() => handleSizeSelection(size)}
                 >
                   {size.title}
                   {size.qty < 1 && (
-                    <span className="absolute top-1/2 transform -translate-y-1/2 left-0 w-full h-0.5 bg-foreground"></span>
+                    <span
+                      className="absolute top-1/2 transform -rotate-[30deg] -translate-y-1/2 -translate-x-1/2
+                     left-1/2 w-full h-0.5 bg-foreground"
+                    />
                   )}
                 </Button>
               ))}
@@ -217,32 +269,70 @@ const ColorSelector = ({
         </>
       )}
 
-      <Separator className="bg-foreground/20 my-2" />
-      <Label htmlFor="qty">اختر الكمية</Label>
-      <div className="flex phone-only:w-full w-80">
-        <Button onClick={increment} disabled={quantity >= getMaxQuantity()}>
-          +
-        </Button>
-        <Input
-          value={quantity}
-          onChange={handleInputChange}
-          id="qty"
-          type="number"
-          className="mx-2"
-          max={getMaxQuantity()} // Set the max attribute for the input
-        />
-        <Button onClick={decrement} disabled={quantity === 0}>
-          -
-        </Button>
-      </div>
-
-      <CustomLink
-        href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
-        variant={"default"}
-        className="md:w-1/2"
-      >
-        شراء الآن
-      </CustomLink>
+      <Separator className="bg-foreground/20 my-2 hidden md:block" />
+      {/* <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only::bg-secondary">
+        <Label htmlFor="qty">اختر الكمية</Label>
+        <div className="flex phone-only:w-full  max-w-60 py-2 px-1 justify-between bg-accent  rounded-[62px] w-80">
+          <button
+            onClick={increment}
+            className="px-3 text-center content-center"
+            disabled={quantity >= getMaxQuantity()}
+          >
+            +
+          </button>
+          <input
+            value={quantity}
+            onChange={handleInputChange}
+            id="qty"
+            type="text"
+            className="mx-2 outline-none bg-transparent border-0 shadow-none text-center"
+            max={getMaxQuantity()} // Set the max attribute for the input
+          />
+          <button
+            className="px-3 text-center content-center"
+            onClick={decrement}
+            disabled={quantity === 0}
+          >
+            -
+          </button>
+        </div>
+        {buyNow && (
+          <CustomLink
+            href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
+            variant={"default"}
+            className="md:w-1/2"
+          >
+            شراء الآن
+          </CustomLink>
+        )}
+      </div> */}
+      <CartAndBuy
+        buyNow={buyNow}
+        currentColor={currentColor}
+        selectedSize={selectedSize}
+        link={link}
+        increment={increment}
+        decrement={decrement}
+        handleInputChange={handleInputChange}
+        quantity={quantity}
+        getMaxQuantity={getMaxQuantity}
+        defaultSizeId={selectedSize?.id || ""}
+        cartItem={{
+          colorShcemeId: currentColor,
+          image:
+            colors.find((color) => color.id === currentColor)?.image ??
+            product.image,
+          price: product.price,
+          productId: product.id,
+          quantity: 1,
+          title: product.title,
+          hexOfColor:
+            colors.find((color) => color.id === currentColor)?.color ?? "#000",
+          sizeId: selectedSize?.id || "",
+          nameOfColor:
+            colors.find((color) => color.id === currentColor)?.name || "",
+        }}
+      />
     </div>
   );
 };

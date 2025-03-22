@@ -35,3 +35,15 @@ declare interface Lab {
   image: string;
   slug: string;
 }
+
+declare interface CartItem {
+  productId: string; // ID of the product
+  colorShcemeId: string; // ID of the selected color scheme
+  sizeId: string; // ID of the selected size
+  quantity: number; // Quantity of the item
+  title: string; // Title of the product
+  price: number; // Price of the product
+  hexOfColor?: string; // Optional hex color code
+  nameOfColor?: string; // Optional name of the color
+  image: string; // URL of the product image
+}

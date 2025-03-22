@@ -49,6 +49,7 @@ export async function createProductAction(
       price: Number(price),
       image,
       originalPrice: Number(originalPrice),
+      info: "",
     });
 
     console.log("User created successfully:", res);
