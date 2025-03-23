@@ -3,7 +3,7 @@ import { getProductById, getProducts } from "@/database/products";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
-export const generatestaticparams = async () => {
+export const generateStaticParams = async () => {
   const products = await getProducts({});
   return products.map((product) => ({
     productId: product.id,
