@@ -46,4 +46,5 @@ declare interface CartItem {
   hexOfColor?: string; // Optional hex color code
   nameOfColor?: string; // Optional name of the color
   image: string; // URL of the product image
+  sizeName: string;
 }

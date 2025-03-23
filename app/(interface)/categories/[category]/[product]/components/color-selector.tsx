@@ -100,6 +100,7 @@ const ColorSelector = ({
         sizeId: selectedSize?.id || "",
         nameOfColor:
           colors.find((color) => color.id === currentColor)?.name || "",
+        sizeName: selectedSize?.title ?? "الافتراضي",
       });
     }
   };
@@ -329,6 +330,7 @@ const ColorSelector = ({
           hexOfColor:
             colors.find((color) => color.id === currentColor)?.color ?? "#000",
           sizeId: selectedSize?.id || "",
+          sizeName: selectedSize?.title ?? "الافتراضي",
           nameOfColor:
             colors.find((color) => color.id === currentColor)?.name || "",
         }}

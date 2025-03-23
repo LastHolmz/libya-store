@@ -1,18 +1,6 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface CartItem {
-  productId: string;
-  colorShcemeId: string;
-  sizeId: string;
-  quantity: number;
-  title: string;
-  price: number;
-  hexOfColor?: string;
-  nameOfColor?: string;
-  image: string;
-}
-
 interface CartContextType {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;

@@ -51,7 +51,7 @@ const CartAndBuy = ({
     <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only:bg-secondary">
       <Label htmlFor="qty">اختر الكمية</Label>
       {currentCartItem ? (
-        <div className="flex phone-only:w-full  max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
+        <div className="flex phone-only:w-full  md:max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
           <button
             onClick={increment}
             className="px-3 text-center content-center"
