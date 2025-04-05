@@ -37,7 +37,7 @@ function wrapTablesAndImages(html: string): string {
         ?.map((img) =>
           img.replace(
             /<img([\s\S]*?)>/,
-            `<img $1 class="customImage rounded-lg shadow-md max-w-full w-full h-full" loading="lazy" />`
+            `<img  class="customImage md:max-h-96 rounded-lg shadow-md max-w-full w-full h-full" loading="lazy" />`
           )
         )
         .join("") || "";

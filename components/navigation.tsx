@@ -69,7 +69,8 @@ export function TabLink({ href, content, className }: TabLinkProps) {
   );
 }
 export function HomeTabLink({ href, content, className }: TabLinkProps) {
-  const pathname = usePathname();
+  const path = usePathname();
+  const pathname = path.split("?")[0];
   return (
     <div className="relative my-1 w-fit">
       <Link

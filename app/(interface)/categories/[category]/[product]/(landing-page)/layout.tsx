@@ -21,6 +21,7 @@ import {
 import ColorSelector from "./components/color-selector";
 import Header from "@/app/(interface)/components/header";
 import Footer from "@/app/(interface)/components/footer";
+import RenderHtml from "@/components/ui/render-html";
 
 // export const generatestaticparams = async () => {
 //   const products = await getProducts({});
@@ -38,7 +39,7 @@ const page = async ({
 }) => {
   const header = (await searchParams)?.header;
   const footer = (await searchParams)?.footer;
-  const buynow = (await searchParams)?.buynow ?? "false";
+  // const buynow = (await searhParams)?.buynow ?? "false";
 
   const { category: categoryId, product: productId } = await params;
   const product = await getProductById(productId);
@@ -55,6 +56,8 @@ const page = async ({
   const sizes = product.colorShcemes
     .map((color) => color.sizes.map((size) => size))
     .flat();
+
+  console.log(product);
 
   return (
     <div className="relative ">
@@ -88,8 +91,8 @@ const page = async ({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="flex my-10  phone-only:flex-col phone-only:px-2 mx-auto md:container items-start justify-between phone-only:gap-5 gap-10">
-          <div dir="ltr" className="md:w-2/3 w-full">
+        <div className="flex my-10 phone-only:flex-col phone-only:px-2 mx-auto md:container items-start justify-between phone-only:gap-5 gap-10">
+          <div dir="ltr" className="md:w-2/3 w-full mb-10">
             <ThumnailSlider images={images} />
           </div>
           <div className="grid gap-4 text-start w-full">
@@ -112,7 +115,7 @@ const page = async ({
               link={`/${categoryId}/${productId}`}
               sizes={sizes}
               colors={product.colorShcemes}
-              buyNow={buynow === "true"}
+              // buyNow={buynow === "true"}
               product={product}
             />
             <Separator />
@@ -144,7 +147,21 @@ const page = async ({
           </div>
         </div>
       </main>
-      {footer && footer === "false" ? null : <Footer />}
+      <div className="container my-2">
+        <Separator className="my-2" />
+        {product.info && (
+          <div className="md:w-1/2 md:mx-auto">
+            <h2 className="font-bold text-2xl">التفاصيل</h2>
+            <br />
+            <RenderHtml html={product.info} />
+          </div>
+        )}
+      </div>
+      {footer && footer === "false" ? null : (
+        <div className="mb-[146px]">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 };

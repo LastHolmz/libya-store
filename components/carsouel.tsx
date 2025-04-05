@@ -460,7 +460,7 @@ export const ThumsSlider: React.FC = () => {
         {slidesrArr.map((slide, index) => (
           <div
             key={`thumb-${index}`}
-            className={`min-w-0 w-full xl:h-24 aspect-auto border-2 rounded-md ${
+            className={`min-w-0 w-20 h-20 aspect-auto border-2 rounded-md ${
               index === selectedIndex
                 ? "opacity-100"
                 : "border-transparent opacity-30"
@@ -470,7 +470,7 @@ export const ThumsSlider: React.FC = () => {
           >
             <motion.img
               src={slide}
-              className="w-full h-full object-cover rounded-sm"
+              className="w-full h-full object-contain rounded-sm"
               width={400}
               height={400}
               alt={slide.alt || `Thumbnail ${index + 1}`}

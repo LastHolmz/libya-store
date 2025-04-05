@@ -5,23 +5,24 @@ import { CustomLink } from "@/components/custom-link";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { PiShoppingCart } from "react-icons/pi";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
-  increment: () => void;
-  decrement: () => void;
+  increment: (buynow?: boolean) => void;
+  decrement: (buynow?: boolean) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   quantity: number;
   getMaxQuantity: () => number;
-  buyNow: boolean;
+  // buyNow: boolean;
   link: string;
   currentColor: string;
   selectedSize: CustomSize | null;
-  defaultSizeId: string;
+  // defaultSizeId: string;
   cartItem: CartItem;
 }
 
 const CartAndBuy = ({
-  buyNow,
+  // buyNow,
   currentColor,
   selectedSize,
   link,
@@ -30,9 +31,12 @@ const CartAndBuy = ({
   handleInputChange,
   quantity,
   getMaxQuantity,
-  defaultSizeId,
   cartItem,
 }: Props) => {
+  const searchParams = useSearchParams();
+  const buynow = searchParams.get("buynow");
+  const qty = searchParams.get("qty");
+
   const { findCartItemBySizeId, addToCart } = useCart();
   // const [sizeId, setSizeId] = React.useState(defaultSizeId);
   const [currentCartItem, setCurrentCartItem] = useState(
@@ -50,10 +54,47 @@ const CartAndBuy = ({
   return (
     <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only:bg-secondary">
       <Label htmlFor="qty">اختر الكمية</Label>
-      {currentCartItem ? (
+      {/* {} */}
+
+      {buynow === "true" ? (
+        <div className="md:flex md:gap-2 items-center">
+          <div className="flex phone-only:w-full  md:max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
+            <button
+              onClick={() => increment(buynow === "true")}
+              className="px-3 text-center content-center"
+              disabled={quantity >= getMaxQuantity()}
+            >
+              +
+            </button>
+            <input
+              value={qty ?? ""}
+              onChange={handleInputChange}
+              id="qty"
+              type="text"
+              className="mx-2 outline-none bg-transparent border-0 shadow-none text-center"
+              max={getMaxQuantity()}
+              // Set the max attribute for the input
+            />
+            <button
+              className="px-3 text-center content-center"
+              onClick={() => decrement(buynow === "true")}
+              disabled={Number(qty) === 0}
+            >
+              -
+            </button>
+          </div>
+          <CustomLink
+            href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
+            variant={"default"}
+            className="md:w-1/2 w-full mt-2 rounded-[62px]"
+          >
+            شراء الآن
+          </CustomLink>
+        </div>
+      ) : currentCartItem ? (
         <div className="flex phone-only:w-full  md:max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
           <button
-            onClick={increment}
+            onClick={() => increment(buynow === "true")}
             className="px-3 text-center content-center"
             disabled={quantity >= getMaxQuantity()}
           >
@@ -66,12 +107,11 @@ const CartAndBuy = ({
             type="text"
             className="mx-2 outline-none bg-transparent border-0 shadow-none text-center"
             max={getMaxQuantity()}
-
             // Set the max attribute for the input
           />
           <button
             className="px-3 text-center content-center"
-            onClick={decrement}
+            onClick={() => decrement(buynow === "true")}
             disabled={currentCartItem.quantity === 0}
           >
             -
@@ -85,16 +125,6 @@ const CartAndBuy = ({
           اضف الى السلة
           <PiShoppingCart />
         </Button>
-      )}
-
-      {buyNow && (
-        <CustomLink
-          href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
-          variant={"default"}
-          className="md:w-1/2"
-        >
-          شراء الآن
-        </CustomLink>
       )}
     </div>
   );

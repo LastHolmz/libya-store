@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Fragment, ReactNode, useState } from "react";
 import {
   addColorToProductAction,
+  addDescriptionProductAction,
   addExtensionToProductAction,
   createProductAction,
   deleteColorOfProductAction,
@@ -32,6 +33,8 @@ import { ResponsiveDialogWithCustomOpenFuncionality } from "@/components/respons
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import uri from "@/lib/uri";
+import Form from "@/components/form";
+import Editor from "@/components/rich-text-editor";
 
 export const CreateProductForm = ({
   categories,
@@ -686,5 +689,16 @@ export const ShareProductForm = ({
         </Button>
       </div>
     </ResponsiveDialogWithCustomOpenFuncionality>
+  );
+};
+
+export const AddDescriptionProductForm = ({ id }: { id: string }) => {
+  const [content, setContent] = useState<string>("");
+  return (
+    <Form submit="إضافة" action={addDescriptionProductAction} dontReplace>
+      <Input type="hidden" name="id" value={id} />
+      <Input type="hidden" name="info" value={content} />
+      <Editor content={content} onChange={setContent} />
+    </Form>
   );
 };

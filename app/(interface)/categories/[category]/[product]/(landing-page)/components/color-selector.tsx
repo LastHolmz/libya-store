@@ -35,13 +35,13 @@ const ColorSelector = ({
   colors,
   sizes,
   link,
-  buyNow,
+  // buyNow,
   product,
 }: {
   colors: Color[];
   sizes: CustomSize[];
   link: string;
-  buyNow: boolean;
+  // buyNow: boolean;
   product: Product;
 }) => {
   const { setQueryParam, deleteQueryParam } = useQueryParam();
@@ -81,44 +81,52 @@ const ColorSelector = ({
   };
 
   // Handle increment
-  const increment = () => {
+  const increment = (buynow: boolean = false) => {
     const maxQty = getMaxQuantity();
     if (quantity < maxQty) {
       setQuantity((prev) => prev + 1);
-      // setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
-      addToCart({
-        colorShcemeId: currentColor,
-        image:
-          colors.find((color) => color.id === currentColor)?.image ??
-          product.image,
-        price: product.price,
-        productId: product.id,
-        quantity: 1,
-        title: product.title,
-        hexOfColor:
-          colors.find((color) => color.id === currentColor)?.color ?? "#000",
-        sizeId: selectedSize?.id || "",
-        nameOfColor:
-          colors.find((color) => color.id === currentColor)?.name || "",
-        sizeName: selectedSize?.title ?? "الافتراضي",
-      });
+      if (buynow) {
+        setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
+      } else {
+        addToCart({
+          colorShcemeId: currentColor,
+          image:
+            colors.find((color) => color.id === currentColor)?.image ??
+            product.image,
+          price: product.price,
+          productId: product.id,
+          quantity: 1,
+          title: product.title,
+          hexOfColor:
+            colors.find((color) => color.id === currentColor)?.color ?? "#000",
+          sizeId: selectedSize?.id || "",
+          nameOfColor:
+            colors.find((color) => color.id === currentColor)?.name || "",
+          sizeName: selectedSize?.title ?? "الافتراضي",
+        });
+      }
     }
   };
 
   // Handle decrement
-  const decrement = () => {
+  const decrement = (buynow: boolean = false) => {
     setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
     if (currentCartItem?.quantity) {
-      // setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
-      if (currentCartItem.quantity === 1) {
-        removeFromCart(product.id, currentColor, selectedSize?.id || "");
+      if (buynow) {
+        if (quantity > 0) {
+          setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
+        }
+      } else {
+        if (currentCartItem.quantity === 1) {
+          removeFromCart(product.id, currentColor, selectedSize?.id || "");
+        }
+        updateQuantity(
+          product.id,
+          currentColor,
+          selectedSize?.id || "",
+          currentCartItem.quantity - 1
+        );
       }
-      updateQuantity(
-        product.id,
-        currentColor,
-        selectedSize?.id || "",
-        currentCartItem.quantity - 1
-      );
     }
   };
 
@@ -308,7 +316,7 @@ const ColorSelector = ({
         )}
       </div> */}
       <CartAndBuy
-        buyNow={buyNow}
+        // buyNow={buyNow}
         currentColor={currentColor}
         selectedSize={selectedSize}
         link={link}
@@ -317,7 +325,7 @@ const ColorSelector = ({
         handleInputChange={handleInputChange}
         quantity={quantity}
         getMaxQuantity={getMaxQuantity}
-        defaultSizeId={selectedSize?.id || ""}
+        // defaultSizeId={selectedSize?.id || ""}
         cartItem={{
           colorShcemeId: currentColor,
           image:

@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Right Section */}
-        <div className="text-start justify-evenly grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">
+        <div className="text-center phone-only:w-full justify-evenly grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">
           {/* Legal Links */}
           <div>
             <h2 className="mb-3 text-sm uppercase">القانوني</h2>

@@ -14,11 +14,12 @@ function ThumnailSlider({
 }) {
   const OPTIONS: EmblaOptionsType = {
     loop: true,
-    align: "start",
+    align: "end",
+    direction: "rtl",
   };
   if (images.length < 1) return <></>;
   return (
-    <div className="w-full mx-auto" style={{ height: "400px" }}>
+    <div dir="rtl" className="w-full mx-auto" style={{ height: "450px" }}>
       {" "}
       {/* Fixed height */}
       <Carousel options={OPTIONS} className="relative" isAutoPlay={true}>
@@ -26,7 +27,7 @@ function ThumnailSlider({
           {images.map((image, index) => (
             <Slider
               key={index}
-              className="xl:h-[400px] sm:h-[350px] h-[300px] w-full"
+              className="xl:h-[450px] sm:h-[400px] h-[400px] w-full"
               thumnailSrc={image}
             >
               <Image

@@ -7,15 +7,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { PiArticleMediumThin } from "react-icons/pi";
 
-const dashboardPage = async ({}: // params,
-{
-  // params: Promise<{ lang: string }>;
-}) => {
-  // const employees = await getUsers({});
-  // const articles = await getArticles({});
-  // const lang = (await params).lang;
+const dashboardPage = async () => {
   return (
     <main className="container mt-4">
       <Breadcrumb className="my-2" dir="rtl">

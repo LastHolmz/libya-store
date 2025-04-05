@@ -9,9 +9,7 @@ import {
 import Link from "next/link";
 import { getProductById } from "@/database/products";
 import { notFound } from "next/navigation";
-import RenderHtml from "@/components/ui/render-html";
-import { Button } from "@/components/ui/button";
-import { CustomLink } from "@/components/custom-link";
+import { AddDescriptionProductForm } from "../../../components/forms";
 
 const page = async (props: { params: Promise<{ productId: string }> }) => {
   const params = await props.params;
@@ -53,27 +51,20 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>الشرح</BreadcrumbPage>
+              <BreadcrumbLink asChild>
+                <Link href={`/dashboard/inventory/${product.id}/description`}>
+                  {"الشرح"}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>اضافة</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <section className="my-4 rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh] content-center">
-          <div className="flex justify-between items-center gap-10">
-            {product?.info ? (
-              <RenderHtml html={product.info} />
-            ) : (
-              <>
-                <div className="text-center w-fit mx-auto content-center">
-                  <p className="mb-2">لا يوجد شرح</p>
-                  <CustomLink variant={"default"} href="description/add">
-                    إضافة شرح
-                  </CustomLink>
-                </div>
-              </>
-            )}
-
-            {/* <Editor content={enBody} onChange={setEnBody} /> */}
-          </div>
+          <AddDescriptionProductForm id={product.id} />
         </section>
       </div>
     </main>

@@ -41,6 +41,7 @@ model Product {
     extensions     Extension[]
     // sizes          Size[]
     colorShcemes   ColorShceme[]
+    reviews        Review[]
 }
 
 model Category {
@@ -129,6 +130,18 @@ model OrderItem {
     updatedAt   DateTime @updatedAt
     order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
     orderId     String?  @db.ObjectId
+}
+
+model Review {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    fullName  String
+    rating    Int
+    comment   String?
+    accepted  Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Product   Product? @relation(fields: [productId], references: [id])
+    productId String?  @db.ObjectId
 }
 
 enum OrderStatus {

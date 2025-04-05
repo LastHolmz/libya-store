@@ -175,6 +175,12 @@ const getProductById = async (id: string) => {
             id: true,
           },
         },
+        reviews: {
+          select: {
+            rating: true,
+          },
+        },
+        _count: true,
       },
     });
     if (!product) {
@@ -326,6 +332,27 @@ const deleteExtensionOfProduct = async ({ id }: { id: string }) => {
   }
 };
 
+const addDescriptionToProduct = async ({
+  id,
+  info,
+}: {
+  info: string;
+  id: string;
+}): Promise<{ message: string }> => {
+  try {
+    const product = await prisma.product.update({
+      where: { id },
+      data: { info },
+    });
+    if (!product) {
+      return { message: "فشل اضافة الشرح" };
+    }
+    return { message: "تم اضافة الشرح" };
+  } catch (error) {
+    return { message: "فشل اضافة الشرح" };
+  }
+};
+
 export {
   CreateProduct,
   deleteColor,
@@ -336,4 +363,5 @@ export {
   addExtensionToProduct,
   updateExtensionOfProduct,
   deleteExtensionOfProduct,
+  addDescriptionToProduct,
 };

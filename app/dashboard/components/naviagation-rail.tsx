@@ -3,7 +3,7 @@ import { Sidebar, Menu, sidebarClasses } from "react-pro-sidebar";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaBars } from "react-icons/fa";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { FaRegNewspaper } from "react-icons/fa6";
 import {
@@ -17,7 +17,6 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { HiMiniBars2 } from "react-icons/hi2";
 import ToggleTheme from "@/components/theme-toggle";
-import { GiTeacher } from "react-icons/gi";
 
 const NavigationRailItem = ({
   href,

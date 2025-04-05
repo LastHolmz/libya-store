@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   CreateProduct,
   addColorToProduct,
+  addDescriptionToProduct,
   addExtensionToProduct,
   deleteColor,
   deleteExtensionOfProduct,
@@ -308,6 +309,41 @@ export async function deleteExtensionOfProductAction(
 
     const result = await deleteExtensionOfProduct({
       id,
+    });
+
+    return { message: result.message };
+  } catch (error) {
+    console.error("Error in addColorToProductAction:", error);
+    return { message: "فشلت العملية، يرجى المحاولة لاحقاً" };
+  }
+}
+export async function addDescriptionProductAction(
+  _: { message: string },
+  formData: FormData
+) {
+  try {
+    const schema = z.object({
+      id: z.string(),
+      info: z.string(),
+    });
+
+    const data = schema.safeParse({
+      id: formData.get("id") || "",
+      info: formData.get("info") || "",
+    });
+
+    if (!data.success) {
+      console.error("Validation errors:", data.error.errors);
+      return {
+        message: data.error.errors.map((err) => err.message).join(", "),
+      };
+    }
+
+    const { id, info } = data.data;
+
+    const result = await addDescriptionToProduct({
+      id,
+      info,
     });
 
     return { message: result.message };
