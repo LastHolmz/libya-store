@@ -66,7 +66,7 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <section className="my-4 relative rounded-md shadow-md bg-accent p-1 md:p-4 mih-h-[50vh]">
+        <section className="my-4 relative rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh]">
           <AddExtensionToProductForm id={product.id} />
           <br className="min-h-5" />
           <div className="grid lg:grid-cols-2 md:grid-cols-2  gap-10">

@@ -11,7 +11,7 @@ import { createReviewAction } from "../actoins";
 
 export const WriteReviewForm = ({ productId }: { productId: string }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [rating, setRating] = useState<number>(0); // ← track rating
+  const [rating, setRating] = useState<number>(4.9); // ← track rating
 
   return (
     <AccessibleDialogForm
@@ -26,7 +26,7 @@ export const WriteReviewForm = ({ productId }: { productId: string }) => {
       <Input type="hidden" name="productId" value={productId} />
       <Input type="hidden" name="rating" value={rating} />{" "}
       {/* ← submit rating */}
-      <div className="grid gap-4">
+      <div className="grid gap-4 py-2">
         <div className="grid gap-2">
           <Label>تقييمك</Label>
           <StarRatings

@@ -27,6 +27,7 @@ import RatesOfProduct from "./components/rates-of-product";
 import { formatDate, parseDateWithArabicMonth } from "@/lib/date";
 import ReviewCard from "./components/review-card";
 import { WriteReviewForm } from "./components/forms";
+import Image from "next/image";
 // import dynamic from "next/dynamic";
 // import StarRatings from "react-star-ratings";
 // const StarRatings = dynamic(() => import("react-star-ratings"), { ssr: false });
@@ -136,10 +137,19 @@ const page = async ({
                 {product.price} د
               </b>
               <span className="rounded-lg bg-red-400 text-white px-2 ">
-                -40%
+                {product?.fakeDiscountRation && product.fakeDiscountRation > 0
+                  ? `${product.fakeDiscountRation}%-`
+                  : null}
               </span>
               <span className="text-xl font-normal text-foreground/60 line-through md:text-2xl">
-                {product.price + (product.price * 40) / 100} د
+                {product?.fakeDiscountRation &&
+                  product.fakeDiscountRation > 0 && (
+                    <>
+                      {product.price +
+                        (product.price * product.fakeDiscountRation) / 100}{" "}
+                      د
+                    </>
+                  )}
               </span>
             </div>
             <p className="text-foreground/70 text-sm">{product.description}</p>
@@ -179,6 +189,19 @@ const page = async ({
           </div>
         </div>
       </main>
+      <div className="grid container md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+        {images?.map((img, i) => (
+          <div className="max-w-sm  overflow-hidden max-h-56 rounded-lg">
+            <Image
+              src={img}
+              alt={` product-${product.title}-image-${i} `}
+              width={400}
+              height={400}
+              className="object-cover w-full h-full"
+            />
+          </div>
+        ))}
+      </div>
       <div className="container my-2">
         <Separator className="my-2" />
         {product.info && (
@@ -193,21 +216,21 @@ const page = async ({
       </div>
       <div className="container my-2">
         <Separator className="my-8" />
-        {reviews.length > 0 && (
-          <div className="md:mx-auto">
-            <div className="flex justify-between">
-              <h3 className="font-bold text-3xl">التقييمات</h3>
-              <WriteReviewForm productId={product.id} />
-            </div>{" "}
-            <br />
-            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              {reviews.map((review, i) => (
-                <ReviewCard review={review} key={i} />
-              ))}
-            </div>
-            {/* <RenderHtml html={product.info} /> */}
+        <div className="md:mx-auto">
+          <div className="flex justify-between">
+            <h3 className="font-bold text-3xl">التقييمات</h3>
+            <WriteReviewForm productId={product.id} />
+          </div>{" "}
+          <br />
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {reviews.length > 0 ? (
+              reviews.map((review, i) => <ReviewCard review={review} key={i} />)
+            ) : (
+              <div>لا يوجد تعليقات بعد</div>
+            )}
           </div>
-        )}
+          {/* <RenderHtml html={product.info} /> */}
+        </div>
       </div>
       {footer && footer === "false" ? null : (
         <div className="phone-only:mb-[146px]">

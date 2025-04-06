@@ -7,8 +7,10 @@ import {
   deleteColor,
   deleteExtensionOfProduct,
   updateColorOfProduct,
+  updateConfigOfProduct,
   updateExtensionOfProduct,
 } from "@/database/products";
+import { SelectType } from "@prisma/client";
 
 export async function createProductAction(
   _: { message: string },
@@ -50,7 +52,7 @@ export async function createProductAction(
       price: Number(price),
       image,
       originalPrice: Number(originalPrice),
-      info: "",
+      // info: "",
     });
 
     console.log("User created successfully:", res);
@@ -350,5 +352,64 @@ export async function addDescriptionProductAction(
   } catch (error) {
     console.error("Error in addColorToProductAction:", error);
     return { message: "فشلت العملية، يرجى المحاولة لاحقاً" };
+  }
+}
+
+export async function updateConfigAction(
+  _: { message: string },
+  formData: FormData
+): Promise<{ message: string }> {
+  try {
+    const schema = z.object({
+      id: z.string(),
+      selectType: z.nativeEnum(SelectType),
+      acceptReviews: z.union([z.literal("on"), z.literal("off")]).optional(),
+      fakeRating: z.coerce.number().nullable().optional(),
+      fakeDiscountRation: z.coerce.number().optional(),
+      fakeRatingSelected: z
+        .union([z.literal("on"), z.literal("off")])
+        .optional(),
+    });
+
+    const parsed = schema.safeParse({
+      id: formData.get("id") || "",
+      selectType: formData.get("selectType") || "",
+      acceptReviews: formData.get("acceptReviews") || "off",
+      fakeRating: formData.get("fakeRating") || null,
+      fakeDiscountRation: formData.get("fakeDiscountRation") || 0,
+      fakeRatingSelected: formData.get("fakeRatingSelected") || "off",
+    });
+
+    if (!parsed.success) {
+      console.error("Validation errors:", parsed.error.errors);
+      return {
+        message: parsed.error.errors.map((err) => err.message).join(", "),
+      };
+    }
+
+    console.log(parsed.data);
+
+    const {
+      id,
+      selectType,
+      acceptReviews,
+      fakeRating,
+      fakeDiscountRation,
+      fakeRatingSelected,
+    } = parsed.data;
+
+    const result = await updateConfigOfProduct({
+      selectType,
+      id,
+      acceptReviews: acceptReviews === "on",
+      fakeRating: fakeRating ?? null,
+      fakeDiscountRation,
+      fakeRatingSelected: fakeRatingSelected === "on",
+    });
+
+    return { message: result.message };
+  } catch (error) {
+    console.error("Error in updateConfigAction:", error);
+    return { message: "حدث خطأ أثناء التحديث" };
   }
 }

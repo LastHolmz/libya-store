@@ -1,8 +1,16 @@
 "use server";
 
 import prisma from "@/prisma/db";
-import { ColorShceme, Extension, Product, User } from "@prisma/client";
+import {
+  ColorShceme,
+  Extension,
+  Product,
+  SelectType,
+  User,
+} from "@prisma/client";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { inspect } from "util";
+import { boolean } from "zod";
 
 const CreateProduct = async ({
   // barcode,
@@ -12,10 +20,14 @@ const CreateProduct = async ({
   originalPrice,
   price,
   title,
-}: Omit<
-  Product,
-  "id" | "createdAt" | "updatedAt" | "brandIDs" | "subCategoryIDs" | "barcode"
->) => {
+}: {
+  categoryId: string;
+  description: string | null;
+  image: string;
+  originalPrice: number | null;
+  price: number;
+  title: string;
+}) => {
   try {
     const product = await prisma.product.create({
       data: {
@@ -345,11 +357,51 @@ const addDescriptionToProduct = async ({
       data: { info },
     });
     if (!product) {
-      return { message: "فشل اضافة الشرح" };
+      return { message: "فشل تحديث شرح المنتج" };
     }
-    return { message: "تم اضافة الشرح" };
+    return { message: "تم تحديث شرح المنتج" };
   } catch (error) {
-    return { message: "فشل اضافة الشرح" };
+    return { message: "فشل تحديث شرح المنتج" };
+  }
+};
+
+const updateConfigOfProduct = async ({
+  acceptReviews,
+  fakeRatingSelected,
+  selectType,
+  fakeRating,
+  fakeDiscountRation,
+  id,
+}: {
+  selectType: SelectType;
+  acceptReviews: boolean;
+  id: string;
+  fakeRatingSelected: boolean;
+  fakeRating?: number | null;
+  fakeDiscountRation?: number | null;
+}) => {
+  try {
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        acceptReviews,
+        fakeRatingSelected,
+        selectType,
+        fakeRating: fakeRating && fakeRating > 5 ? 5 : fakeRating,
+        fakeDiscountRation: fakeDiscountRation,
+      },
+    });
+    if (!product) {
+      return { message: "فشل تحديث اعدادات المنتج" };
+    }
+    revalidatePath("/");
+    return { message: "تم تحديث اعدادات المنتج" };
+  } catch (error) {
+    console.error(
+      "Error updating product config:",
+      inspect(error, { depth: null })
+    );
+    return { message: "فشل تحديث اعدادات المنتج" };
   }
 };
 
@@ -364,4 +416,5 @@ export {
   updateExtensionOfProduct,
   deleteExtensionOfProduct,
   addDescriptionToProduct,
+  updateConfigOfProduct,
 };

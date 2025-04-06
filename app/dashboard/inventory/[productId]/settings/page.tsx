@@ -9,9 +9,18 @@ import {
 import Link from "next/link";
 import { getProductById } from "@/database/products";
 import { notFound } from "next/navigation";
-import RenderHtml from "@/components/ui/render-html";
-import { Button } from "@/components/ui/button";
-import { CustomLink } from "@/components/custom-link";
+import Image from "next/image";
+import UpdateConfigForm, {
+  AddExtensionToProductForm,
+  DeleteExtensionOfProductForm,
+  UpdateExtensionOfProductForm,
+} from "../../components/forms";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CiMenuKebab } from "react-icons/ci";
 
 const page = async (props: { params: Promise<{ productId: string }> }) => {
   const params = await props.params;
@@ -23,7 +32,7 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
 
   return (
     <main className="phone-only:px-4">
-      <div className="md:container phone-only:px-0">
+      <div className="md:container  min-h-[50vh] phone-only:px-0">
         <Breadcrumb className="my-2" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -53,37 +62,13 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>الشرح</BreadcrumbPage>
+              <BreadcrumbPage></BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <section className="my-4 rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh] content-center">
-          <div className="">
-            {product?.info ? (
-              <div>
-                <div className="flex justify-between items-center">
-                  <h1 className="text-2xl font-bold mb-4">الشرح</h1>
-                  <CustomLink variant={"default"} href="description/add">
-                    تحديث الشرح
-                  </CustomLink>
-                </div>
-                <div className="w-1/2 mx-auto">
-                  <RenderHtml html={product.info} />
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="text-center w-fit mx-auto content-center">
-                  <p className="mb-2">لا يوجد شرح</p>
-                  <CustomLink variant={"default"} href="description/add">
-                    إضافة شرح
-                  </CustomLink>
-                </div>
-              </>
-            )}
-
-            {/* <Editor content={enBody} onChange={setEnBody} /> */}
-          </div>
+        <section className="my-4 relative rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh]">
+          <h2 className="font-bold">الإعدادات</h2>
+          <UpdateConfigForm id={product.id} config={{ ...product }} />
         </section>
       </div>
     </main>

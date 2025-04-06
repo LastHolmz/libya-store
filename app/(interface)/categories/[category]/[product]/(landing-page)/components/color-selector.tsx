@@ -1,6 +1,6 @@
 "use client";
 
-import Color from "@/components/color";
+import SelectColor from "@/components/color";
 import { CustomLink } from "@/components/custom-link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -223,12 +223,18 @@ const ColorSelector = ({
               onClick={() => setColorSchem(color.id)}
               disabled={number < 1}
             >
-              <Color
+              <SelectColor
+                showType={product.selectType}
                 className={cn(
                   "w-12 h-12  shadow-md flex justify-center items-center",
                   currentColor === color.id &&
-                    "border-[1px] border-popover-foreground shadow-lg scale-105"
+                    "border-[1px] border-popover-foreground shadow-lg scale-105",
+                  product.selectType === "photos" && "w-14 h-14",
+                  product.selectType === "photos" &&
+                    currentColor === color.id &&
+                    "border-[2px] border-primary"
                 )}
+                variant={currentColor === color.id ? "default" : ""}
                 {...color}
               >
                 <MdDone
@@ -237,7 +243,7 @@ const ColorSelector = ({
                     currentColor === color.id && "block"
                   )}
                 />
-              </Color>
+              </SelectColor>
             </button>
           );
         })}
@@ -260,7 +266,6 @@ const ColorSelector = ({
                   className={cn(
                     "rounded-[62px] transition-all duration-500  px-6 relative overflow-hidden",
                     size.qty < 1 && "cursor-not-allowed"
-                    // selectedSize?.id === size.id && ""
                   )}
                   key={idx}
                   onClick={() => handleSizeSelection(size)}
@@ -281,7 +286,6 @@ const ColorSelector = ({
       <Separator className="bg-foreground/20 my-2 hidden md:block" />
 
       <CartAndBuy
-        // buyNow={buyNow}
         currentColor={currentColor}
         selectedSize={selectedSize}
         link={link}

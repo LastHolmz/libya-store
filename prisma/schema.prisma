@@ -22,26 +22,32 @@ model User {
 }
 
 model Product {
-    id             String        @id @default(auto()) @map("_id") @db.ObjectId
-    title          String
-    price          Int
-    originalPrice  Int?
-    description    String?
-    info           String?
-    createdAt      DateTime      @default(now())
-    updatedAt      DateTime      @updatedAt
-    barcode        String
-    image          String
-    categoryId     String        @db.ObjectId
-    category       Category      @relation(fields: [categoryId], references: [id])
-    brandIDs       String[]      @db.ObjectId
-    brands         Brand[]       @relation(fields: [brandIDs], references: [id])
-    subCategoryIDs String[]      @db.ObjectId
-    subCategories  SubCategory[] @relation(fields: [subCategoryIDs], references: [id])
-    extensions     Extension[]
+    id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+    title              String
+    price              Int
+    originalPrice      Int?
+    description        String?
+    info               String?
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+    barcode            String
+    image              String
+    categoryId         String        @db.ObjectId
+    category           Category      @relation(fields: [categoryId], references: [id])
+    brandIDs           String[]      @db.ObjectId
+    brands             Brand[]       @relation(fields: [brandIDs], references: [id])
+    subCategoryIDs     String[]      @db.ObjectId
+    subCategories      SubCategory[] @relation(fields: [subCategoryIDs], references: [id])
+    extensions         Extension[]
     // sizes          Size[]
-    colorShcemes   ColorShceme[]
-    reviews        Review[]
+    colorShcemes       ColorShceme[]
+    reviews            Review[]
+    // the selection way in landing page of the product
+    selectType         SelectType    @default(colors)
+    acceptReviews      Boolean       @default(false)
+    fakeRating         Int?
+    fakeDiscountRation Int?          @default(0)
+    fakeRatingSelected Boolean       @default(false)
 }
 
 model Category {
@@ -166,4 +172,10 @@ enum Roles {
 enum Gender {
     male
     female
+}
+
+enum SelectType {
+    photos
+    colors
+    names
 }

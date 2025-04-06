@@ -36,12 +36,17 @@ const layout = async ({
           content="الألوان والمقاسات"
         />
         <TabLink
+          href={`/dashboard/inventory/${product.id}/description`}
+          content="الشرح"
+        />
+
+        <TabLink
           href={`/dashboard/inventory/${product.id}/extensions`}
           content="الإضافات"
         />
         <TabLink
-          href={`/dashboard/inventory/${product.id}/description`}
-          content="الشرح"
+          href={`/dashboard/inventory/${product.id}/settings`}
+          content="الإعدادات"
         />
         <TabLink
           href={`/dashboard/inventory/${product.id}/logs`}

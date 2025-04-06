@@ -21,6 +21,7 @@ import {
   deleteColorOfProductAction,
   deleteExtensionOfProductAction,
   updateColorOfProductAction,
+  updateConfigAction,
   updateExtensionOfProductAction,
 } from "../actions";
 import { CustomDropzoneUploadImage } from "@/components/custom-dropzone";
@@ -35,6 +36,7 @@ import { toast } from "@/hooks/use-toast";
 import uri from "@/lib/uri";
 import Form from "@/components/form";
 import Editor from "@/components/rich-text-editor";
+import { Switch } from "@/components/ui/switch";
 
 export const CreateProductForm = ({
   categories,
@@ -692,13 +694,105 @@ export const ShareProductForm = ({
   );
 };
 
-export const AddDescriptionProductForm = ({ id }: { id: string }) => {
-  const [content, setContent] = useState<string>("");
+export const AddDescriptionProductForm = ({
+  id,
+  defaultContent,
+}: {
+  id: string;
+  defaultContent?: string;
+}) => {
+  const [content, setContent] = useState<string>(defaultContent ?? "");
   return (
-    <Form submit="إضافة" action={addDescriptionProductAction} dontReplace>
+    <Form
+      success="تم تحديث شرح المنتج"
+      replaceLink={`/dashboard/inventory/${id}/description`}
+      submit="إضافة"
+      action={addDescriptionProductAction}
+      dontReplace
+    >
       <Input type="hidden" name="id" value={id} />
       <Input type="hidden" name="info" value={content} />
       <Editor content={content} onChange={setContent} />
     </Form>
   );
 };
+
+export default function UpdateConfigForm({
+  config,
+  id,
+}: {
+  config: {
+    selectType: string;
+    acceptReviews: boolean;
+    fakeRating?: number | null;
+    fakeDiscountRation?: number | null;
+    fakeRatingSelected: boolean;
+  };
+  id: string;
+}) {
+  const [formState, setFormState] = useState(config);
+
+  return (
+    <Form
+      action={updateConfigAction}
+      // success="تم تحديث اعدادات المنتج"
+      className="space-y-6 max-w-lg"
+      submit="تحديث"
+    >
+      {/* SelectType */}
+      <Input type="hidden" name="id" value={id} />
+      <div className="space-y-2" dir="rtl">
+        <Label htmlFor="selectType">نوع التحديد</Label>
+        <Select dir="rtl" name="selectType" defaultValue={formState.selectType}>
+          <SelectTrigger>
+            <SelectValue placeholder="اختر النوع" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="colors">الالوان</SelectItem>
+            <SelectItem value="photos">الصور</SelectItem>
+            <SelectItem value="names">الاسماء</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* acceptReviews */}
+      <div className="flex items-center justify-between">
+        <Label htmlFor="acceptReviews">السماح بالمراجعات</Label>
+        <Switch name="acceptReviews" defaultChecked={formState.acceptReviews} />
+      </div>
+
+      {/* fakeRating */}
+      <div className="space-y-2">
+        <Label htmlFor="fakeRating">تقييم مزيف</Label>
+        <Input
+          type="number"
+          name="fakeRating"
+          max={5}
+          min={0}
+          defaultValue={formState.fakeRating ?? ""}
+        />
+      </div>
+
+      {/* fakeDiscountRation */}
+      <div className="space-y-2">
+        <Label htmlFor="fakeDiscountRation">نسبة الخصم المزيف</Label>
+        <Input
+          type="number"
+          name="fakeDiscountRation"
+          min={0}
+          defaultValue={formState.fakeDiscountRation ?? ""}
+        />
+      </div>
+
+      {/* fakeRatingSelected */}
+      <div className="flex items-center justify-between">
+        <Label htmlFor="fakeRatingSelected">اختيار التقييم المزيف</Label>
+        <Switch
+          dir="rtl"
+          name="fakeRatingSelected"
+          defaultChecked={formState.fakeRatingSelected}
+        />
+      </div>
+    </Form>
+  );
+}

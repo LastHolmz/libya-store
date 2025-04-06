@@ -64,7 +64,10 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
           </BreadcrumbList>
         </Breadcrumb>
         <section className="my-4 rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh] content-center">
-          <AddDescriptionProductForm id={product.id} />
+          <AddDescriptionProductForm
+            defaultContent={product?.info ?? ""}
+            id={product.id}
+          />
         </section>
       </div>
     </main>

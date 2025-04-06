@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import Color from "@/components/color";
+import SelectColor from "@/components/color";
 
 const page = async (props: { params: Promise<{ productId: string }> }) => {
   const params = await props.params;
@@ -86,7 +86,7 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
                   <span className="text-foreground/80">الالوان</span>
                   <div className="text-base flex flex-wrap items-center gap-1 w-full">
                     {product.colorShcemes.map((c, i) => (
-                      <Color {...c} key={i} />
+                      <SelectColor showType="colors" {...c} key={i} />
                     ))}
                   </div>
                 </div>{" "}
