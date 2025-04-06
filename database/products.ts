@@ -124,6 +124,12 @@ const getProducts = unstable_cache(
               id: true,
             },
           },
+          reviews: {
+            select: {
+              rating: true,
+            },
+          },
+          _count: true,
         },
       });
       if (!products) {
