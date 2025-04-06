@@ -49,7 +49,6 @@ const page = async ({
 }) => {
   const header = (await searchParams)?.header;
   const footer = (await searchParams)?.footer;
-  // const buynow = (await searhParams)?.buynow ?? "false";
 
   const { category: categoryId, product: productId } = await params;
   const product = await getProductById(productId);
@@ -70,12 +69,12 @@ const page = async ({
     .map((color) => color.sizes.map((size) => size))
     .flat();
 
-  console.log(product);
+  // console.log(product);
 
-  const midOfStars = product.reviews.reduce(
-    (acc, review) => acc + review.rating,
-    0
-  );
+  const midOfStars =
+    product.reviews.length > 0
+      ? product.reviews.reduce((acc, review) => acc + review.rating, 0)
+      : 0;
 
   return (
     <div className="relative ">
@@ -119,11 +118,17 @@ const page = async ({
             </h1>
             <div className="flex gap-2 items-center">
               <span>
-                <RatesOfProduct rating={midOfStars / product._count.reviews} />
+                <RatesOfProduct
+                  rating={
+                    midOfStars > 0 ? midOfStars / product._count.reviews : 5
+                  }
+                />
               </span>
               <span>
-                {midOfStars / product._count.reviews}/
-                <span className="text-foreground/70">5</span>
+                {product._count.reviews > 0
+                  ? midOfStars / product._count.reviews
+                  : 5}
+                /<span className="text-foreground/70">5</span>
               </span>
             </div>
             <div className="flex items-center gap-2 md:gap-4">

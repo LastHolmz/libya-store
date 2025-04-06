@@ -17,7 +17,7 @@ export async function createReviewAction(
     const schema = z.object({
       fullName: z.string().min(2, "الاسم الكامل مطلوب"),
       rating: z.number().min(1).max(5, "التقييم يجب أن يكون بين 1 و 5"),
-      comment: z.string().min(10, "التعليق يجب أن يكون 10 أحرف على الأقل"),
+      comment: z.string().min(5, "التعليق يجب أن يكون 5 أحرف على الأقل"),
       productId: z.string().min(1, "معرف المنتج مطلوب"),
       // accepted: z.string().optional(),
     });
