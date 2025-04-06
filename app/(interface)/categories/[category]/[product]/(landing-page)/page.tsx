@@ -191,7 +191,10 @@ const page = async ({
       </main>
       <div className="grid container md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
         {images?.map((img, i) => (
-          <div className="max-w-sm  overflow-hidden max-h-56 rounded-lg">
+          <div
+            key={i}
+            className="max-w-sm  overflow-hidden max-h-56 rounded-lg"
+          >
             <Image
               src={img}
               alt={` product-${product.title}-image-${i} `}
