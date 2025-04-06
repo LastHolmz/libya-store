@@ -22,7 +22,14 @@ import ColorSelector from "./components/color-selector";
 import Header from "@/app/(interface)/components/header";
 import Footer from "@/app/(interface)/components/footer";
 import RenderHtml from "@/components/ui/render-html";
-import { ReactNode } from "react";
+import { getReviews } from "@/database/reviews";
+import RatesOfProduct from "./components/rates-of-product";
+import { formatDate, parseDateWithArabicMonth } from "@/lib/date";
+import ReviewCard from "./components/review-card";
+import { WriteReviewForm } from "./components/forms";
+// import dynamic from "next/dynamic";
+// import StarRatings from "react-star-ratings";
+// const StarRatings = dynamic(() => import("react-star-ratings"), { ssr: false });
 
 // export const generatestaticparams = async () => {
 //   const products = await getProducts({});
@@ -50,6 +57,9 @@ const page = async ({
   if (!product) {
     return notFound();
   }
+  const reviews = await getReviews({
+    productId: product.id,
+  });
   const images: string[] = [
     product.image,
     ...product.colorShcemes
@@ -61,6 +71,11 @@ const page = async ({
     .flat();
 
   console.log(product);
+
+  const midOfStars = product.reviews.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
 
   return (
     <div className="relative ">
@@ -102,6 +117,15 @@ const page = async ({
             <h1 className="font-extrabold md:text-3xl text-2xl lg:text-5xl">
               {product.title}
             </h1>
+            <div className="flex gap-2 items-center">
+              <span>
+                <RatesOfProduct rating={midOfStars / product._count.reviews} />
+              </span>
+              <span>
+                {midOfStars / product._count.reviews}/
+                <span className="text-foreground/70">5</span>
+              </span>
+            </div>
             <div className="flex items-center gap-2 md:gap-4">
               <b className="text-xl font-normal md:text-2xl">
                 {product.price} د
@@ -153,15 +177,35 @@ const page = async ({
       <div className="container my-2">
         <Separator className="my-2" />
         {product.info && (
-          <div className="md:w-1/2 md:mx-auto">
-            <h2 className="font-bold text-2xl">التفاصيل</h2>
+          <div className="my-10">
+            <h2 className="font-bold text-3xl">التفاصيل</h2>
+            <div className="md:w-1/2 md:mx-auto">
+              <br />
+              <RenderHtml html={product.info} />
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="container my-2">
+        <Separator className="my-8" />
+        {reviews.length > 0 && (
+          <div className="md:mx-auto">
+            <div className="flex justify-between">
+              <h3 className="font-bold text-3xl">التقييمات</h3>
+              <WriteReviewForm productId={product.id} />
+            </div>{" "}
             <br />
-            <RenderHtml html={product.info} />
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {reviews.map((review, i) => (
+                <ReviewCard review={review} key={i} />
+              ))}
+            </div>
+            {/* <RenderHtml html={product.info} /> */}
           </div>
         )}
       </div>
       {footer && footer === "false" ? null : (
-        <div className="mb-[146px]">
+        <div className="phone-only:mb-[146px]">
           <Footer />
         </div>
       )}

@@ -470,7 +470,7 @@ export const ThumsSlider: React.FC = () => {
           >
             <motion.img
               src={slide}
-              className="w-full h-full object-contain rounded-sm"
+              className="w-full h-full object-cover rounded-sm"
               width={400}
               height={400}
               alt={slide.alt || `Thumbnail ${index + 1}`}

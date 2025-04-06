@@ -86,7 +86,7 @@ const ColorSelector = ({
     if (quantity < maxQty) {
       setQuantity((prev) => prev + 1);
       if (buynow) {
-        setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
+        // setQueryParam([{ key: "qty", value: String(quantity + 1) }]);
       } else {
         addToCart({
           colorShcemeId: currentColor,
@@ -114,7 +114,7 @@ const ColorSelector = ({
     if (currentCartItem?.quantity) {
       if (buynow) {
         if (quantity > 0) {
-          setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
+          // setQueryParam([{ key: "qty", value: String(quantity - 1) }]);
         }
       } else {
         if (currentCartItem.quantity === 1) {
@@ -140,7 +140,7 @@ const ColorSelector = ({
       const maxQty = getMaxQuantity();
       if (newQty <= maxQty) {
         setQuantity(newQty); // Convert to number and update state
-        setQueryParam([{ key: "qty", value: value }]);
+        // setQueryParam([{ key: "qty", value: value }]);
       }
     }
   };
@@ -148,7 +148,7 @@ const ColorSelector = ({
   // Function to set the selected color and auto-select the first available size
   const setColorSchem = (color: string) => {
     setCurrentColor(color);
-    setQueryParam([{ key: "colorId", value: color }]);
+    // setQueryParam([{ key: "colorId", value: color }]);
 
     // Find the first available size for the selected color
     const firstAvailableSize = sizes.find(
@@ -157,25 +157,25 @@ const ColorSelector = ({
 
     if (firstAvailableSize) {
       setSelectedSize(firstAvailableSize);
-      setQueryParam([{ key: "sizeId", value: firstAvailableSize.id }]);
+      // setQueryParam([{ key: "sizeId", value: firstAvailableSize.id }]);
     } else {
       setSelectedSize(null);
-      deleteQueryParam(["sizeId"]);
+      // deleteQueryParam(["sizeId"]);
     }
 
     // Reset quantity to 0 when color changes
     setQuantity(0);
-    setQueryParam([{ key: "qty", value: "0" }]);
+    // setQueryParam([{ key: "qty", value: "0" }]);
   };
 
   // Function to handle size selection
   const handleSizeSelection = (size: CustomSize) => {
     setSelectedSize(size);
-    setQueryParam([{ key: "sizeId", value: size.id }]);
+    // setQueryParam([{ key: "sizeId", value: size.id }]);
 
     // Reset quantity to 0 when size changes
     setQuantity(0);
-    setQueryParam([{ key: "qty", value: "0" }]);
+    // setQueryParam([{ key: "qty", value: "0" }]);
   };
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const ColorSelector = ({
       const firstAvailableSize = filteredSizes.find((size) => size.qty > 0);
       if (firstAvailableSize) {
         setSelectedSize(firstAvailableSize);
-        setQueryParam([{ key: "sizeId", value: firstAvailableSize.id }]);
+        // setQueryParam([{ key: "sizeId", value: firstAvailableSize.id }]);
       }
     }
   }, [currentColor, sizes]);
@@ -279,42 +279,7 @@ const ColorSelector = ({
       )}
 
       <Separator className="bg-foreground/20 my-2 hidden md:block" />
-      {/* <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only::bg-secondary">
-        <Label htmlFor="qty">اختر الكمية</Label>
-        <div className="flex phone-only:w-full  max-w-60 py-2 px-1 justify-between bg-accent  rounded-[62px] w-80">
-          <button
-            onClick={increment}
-            className="px-3 text-center content-center"
-            disabled={quantity >= getMaxQuantity()}
-          >
-            +
-          </button>
-          <input
-            value={quantity}
-            onChange={handleInputChange}
-            id="qty"
-            type="text"
-            className="mx-2 outline-none bg-transparent border-0 shadow-none text-center"
-            max={getMaxQuantity()} // Set the max attribute for the input
-          />
-          <button
-            className="px-3 text-center content-center"
-            onClick={decrement}
-            disabled={quantity === 0}
-          >
-            -
-          </button>
-        </div>
-        {buyNow && (
-          <CustomLink
-            href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
-            variant={"default"}
-            className="md:w-1/2"
-          >
-            شراء الآن
-          </CustomLink>
-        )}
-      </div> */}
+
       <CartAndBuy
         // buyNow={buyNow}
         currentColor={currentColor}
@@ -325,7 +290,6 @@ const ColorSelector = ({
         handleInputChange={handleInputChange}
         quantity={quantity}
         getMaxQuantity={getMaxQuantity}
-        // defaultSizeId={selectedSize?.id || ""}
         cartItem={{
           colorShcemeId: currentColor,
           image:

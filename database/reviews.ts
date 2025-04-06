@@ -24,7 +24,7 @@ const CreateReview = async ({
     if (!review) {
       return { message: "فشل التقييم" };
     }
-    revalidateTag("products");
+    revalidateTag("reviews");
     return { message: "تم التقييم بنجاح" };
   } catch (error: any) {
     console.dir(error, { depth: null });
@@ -78,10 +78,11 @@ const deleteReview = async ({ id }: { id: string }) => {
 };
 
 const getReviews = unstable_cache(
-  async ({ comment }: { comment?: string }) => {
+  async ({ comment, productId }: { comment?: string; productId: string }) => {
     try {
       const reviews = await prisma.review.findMany({
         where: {
+          productId,
           comment: {
             contains: comment,
           },

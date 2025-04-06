@@ -6,6 +6,7 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { PiShoppingCart } from "react-icons/pi";
 import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface Props {
   increment: (buynow?: boolean) => void;
@@ -35,10 +36,9 @@ const CartAndBuy = ({
 }: Props) => {
   const searchParams = useSearchParams();
   const buynow = searchParams.get("buynow");
-  const qty = searchParams.get("qty");
+  // const qty = searchParams.get("qty");
 
   const { findCartItemBySizeId, addToCart } = useCart();
-  // const [sizeId, setSizeId] = React.useState(defaultSizeId);
   const [currentCartItem, setCurrentCartItem] = useState(
     findCartItemBySizeId(selectedSize?.id ?? "", currentColor)
   );
@@ -49,25 +49,26 @@ const CartAndBuy = ({
     );
   }, [selectedSize, currentColor, increment, decrement]);
 
-  // console.log("cartItem", existedCartItem);
-
   return (
     <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only:bg-secondary">
       <Label htmlFor="qty">اختر الكمية</Label>
-      {/* {} */}
 
       {buynow === "true" ? (
         <div className="md:flex md:gap-2 items-center">
           <div className="flex phone-only:w-full  md:max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
             <button
               onClick={() => increment(buynow === "true")}
-              className="px-3 text-center content-center"
+              className={cn(
+                "px-3 text-center content-center",
+                quantity >= getMaxQuantity() &&
+                  "cursor-not-allowed text-foreground/50"
+              )}
               disabled={quantity >= getMaxQuantity()}
             >
               +
             </button>
             <input
-              value={qty ?? ""}
+              value={quantity ?? ""}
               onChange={handleInputChange}
               id="qty"
               type="text"
@@ -76,9 +77,12 @@ const CartAndBuy = ({
               // Set the max attribute for the input
             />
             <button
-              className="px-3 text-center content-center"
+              className={cn(
+                "px-3 text-center content-center",
+                quantity === 0 && "cursor-not-allowed text-foreground/50"
+              )}
               onClick={() => decrement(buynow === "true")}
-              disabled={Number(qty) === 0}
+              disabled={Number(quantity) === 0}
             >
               -
             </button>
@@ -86,7 +90,7 @@ const CartAndBuy = ({
           <CustomLink
             href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
             variant={"default"}
-            className="md:w-1/2 w-full mt-2 rounded-[62px]"
+            className="md:w-1/2 w-full phone-only:mt-2 rounded-[62px]"
           >
             شراء الآن
           </CustomLink>
@@ -95,7 +99,11 @@ const CartAndBuy = ({
         <div className="flex phone-only:w-full  md:max-w-60 py-2 px-1 justify-between bg-accent phone-only:bg-background rounded-[62px] w-80">
           <button
             onClick={() => increment(buynow === "true")}
-            className="px-3 text-center content-center"
+            className={cn(
+              "px-3 text-center content-center",
+              quantity >= getMaxQuantity() &&
+                "cursor-not-allowed text-foreground/50"
+            )}
             disabled={quantity >= getMaxQuantity()}
           >
             +
@@ -110,7 +118,11 @@ const CartAndBuy = ({
             // Set the max attribute for the input
           />
           <button
-            className="px-3 text-center content-center"
+            className={cn(
+              "px-3 text-center content-center",
+              currentCartItem.quantity === 0 &&
+                "cursor-not-allowed text-foreground/50"
+            )}
             onClick={() => decrement(buynow === "true")}
             disabled={currentCartItem.quantity === 0}
           >

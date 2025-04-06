@@ -133,22 +133,22 @@ export async function deleteReviewAction(
   }
 }
 
-export async function getReviewsAction(comment?: string) {
-  try {
-    const reviews = await getReviews({ comment });
-    return reviews;
-  } catch (error) {
-    console.error("Error in getReviewsAction:", error);
-    return [];
-  }
-}
+// export async function getReviewsAction(comment?: string) {
+//   try {
+//     const reviews = await getReviews({ comment });
+//     return reviews;
+//   } catch (error) {
+//     console.error("Error in getReviewsAction:", error);
+//     return [];
+//   }
+// }
 
-export async function getReviewByIdAction(id: string) {
-  try {
-    const review = await getReviewById(id);
-    return review;
-  } catch (error) {
-    console.error("Error in getReviewByIdAction:", error);
-    return undefined;
-  }
-}
+// export async function getReviewByIdAction(id: string) {
+//   try {
+//     const review = await getReviewById(id);
+//     return review;
+//   } catch (error) {
+//     console.error("Error in getReviewByIdAction:", error);
+//     return undefined;
+//   }
+// }
