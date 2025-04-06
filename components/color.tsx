@@ -17,13 +17,21 @@ const SelectColor = ({
 }) => {
   switch (showType) {
     case "colors":
-      return <Color {...props} children={children} className={className} />;
+      return (
+        <Color {...props} className={className}>
+          {children}
+        </Color>
+      );
     case "photos":
       return <Photo {...props} className={className} />;
     case "names":
       return <Name {...props} className={className} variant={variant} />;
     default:
-      return <Color {...props} children={children} className={className} />;
+      return (
+        <Color {...props} className={className}>
+          {children}
+        </Color>
+      );
   }
 };
 
