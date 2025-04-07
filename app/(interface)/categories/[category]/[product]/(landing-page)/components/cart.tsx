@@ -51,7 +51,7 @@ const CartAndBuy = ({
 
   return (
     <div className="grid gap-4 phone-only:fixed rounded-md py-4 px-2 bottom-0  left-0 w-full phone-only:bg-secondary z-50">
-      <Label htmlFor="qty">اختر الكمية</Label>
+      <Label>اختر الكمية</Label>
 
       {buynow === "true" ? (
         <div className="md:flex md:gap-2 items-center">

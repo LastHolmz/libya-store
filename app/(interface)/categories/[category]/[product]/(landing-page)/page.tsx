@@ -193,7 +193,7 @@ const page = async ({
         {images?.map((img, i) => (
           <div
             key={i}
-            className="max-w-sm  overflow-hidden max-h-56 rounded-lg"
+            className="max-w-sm overflow-hidden max-h-full bg-secondary rounded-lg"
           >
             <Image
               src={img}

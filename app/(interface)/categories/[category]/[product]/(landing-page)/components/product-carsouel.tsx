@@ -27,7 +27,7 @@ function ThumnailSlider({
           {images.map((image, index) => (
             <Slider
               key={index}
-              className="xl:h-[450px] sm:h-[400px] h-[400px] w-full"
+              className="xl:h-[450px] bg-secondary sm:h-[400px] h-[400px] w-full"
               thumnailSrc={image}
             >
               <Image
