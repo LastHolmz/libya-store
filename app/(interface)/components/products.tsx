@@ -21,13 +21,23 @@ export const ProductCard = ({
     >
       <div className="flex shadow-sm flex-col relative h-full border rounded-[20px] overflow-hidden transition-all duration-200 ease-in-out">
         <div className="relative w-[300px] bg-secondary h-[300px] aspect-square overflow-hidden rounded-[20px]">
-          <Image
-            alt={`صورة - ${product.title}`}
-            src={product.image}
-            fill
-            className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {product.image.length < 4 ? (
+            <Image
+              alt={`صورة - ${product.title}`}
+              src={"/images/not-found.png"}
+              fill
+              className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <Image
+              alt={`صورة - ${product.title}`}
+              src={product.image}
+              fill
+              className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          )}
         </div>
         <div>
           <div className="py-4 px-2">

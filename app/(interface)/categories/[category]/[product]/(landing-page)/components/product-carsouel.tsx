@@ -18,6 +18,7 @@ function ThumnailSlider({
     direction: "rtl",
   };
   if (images.length < 1) return <></>;
+
   return (
     <div dir="rtl" className="w-full mx-auto" style={{ height: "450px" }}>
       {" "}
