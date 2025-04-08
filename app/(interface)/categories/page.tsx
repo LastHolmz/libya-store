@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 const page = async () => {
-  const categories = await getCategories();
+  const categories = await getCategories({});
   return (
     <div>
       <Header />

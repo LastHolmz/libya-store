@@ -7,7 +7,7 @@ import Footer from "./components/footer";
 import { getCategories } from "@/database/categories";
 
 const page = async () => {
-  const categories = await getCategories();
+  const categories = await getCategories({});
   return (
     <main>
       <Header />

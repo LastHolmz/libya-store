@@ -5,11 +5,16 @@ import { Category } from "@prisma/client";
 import { revalidateTag, unstable_cache } from "next/cache";
 
 const getCategories = unstable_cache(
-  async () => {
+  async ({ title }: { title?: string }) => {
     try {
       const categories = await prisma.category.findMany({
         include: {
           _count: true,
+        },
+        where: {
+          title: {
+            contains: title,
+          },
         },
       });
       if (!categories) return [];
@@ -64,7 +69,8 @@ const updateCategory = async ({
   image,
   title,
   id,
-}: Omit<Category, "productIDs" | "slug"> & {
+  slug,
+}: Omit<Category, "productIDs"> & {
   image?: string | null;
 }): Promise<{ message: string }> => {
   try {
@@ -72,6 +78,7 @@ const updateCategory = async ({
       data: {
         title,
         image,
+        slug,
       },
       where: {
         id,

@@ -1,48 +1,119 @@
 "use client";
-import AccessibleDialogForm from "@/components/accible-dialog-form";
-import { useState } from "react";
-import { createCategoryAction } from "../actions";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { CustomDropzoneUploadImage } from "@/components/custom-dropzone";
-import { Button } from "@/components/ui/button";
 
-export const CreateCategory = () => {
-  const [open, setOpen] = useState<boolean>(false);
+import AccessibleDialogForm from "@/components/accible-dialog-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+  createCategoryAction,
+  updateCategoryAction,
+  deleteCategoryAction,
+} from "../actions";
+import { Category } from "@prisma/client";
+import { CustomDropzoneUploadImage } from "@/components/custom-dropzone";
+
+export const CreateCategoryForm = () => {
+  const [open, setOpen] = useState(false);
 
   return (
     <AccessibleDialogForm
-      submit="إنشاء"
       open={open}
       setOpen={setOpen}
-      dontReplace
-      trigger={<Button>إضافة صنف جديد</Button>}
+      title="إضافة تصنيف جديد"
+      submit="إضافة"
       action={createCategoryAction}
-      title="إضافة صنف جديد"
+      trigger={<Button>إضافة تصنيف جديد</Button>}
     >
       <div className="grid gap-4">
-        <CustomDropzoneUploadImage name="image" title="صورة الصنف" />
         <div>
-          <Label htmlFor="title">اسم الصنف</Label>
+          <Label htmlFor="title">اسم التصنيف</Label>
           <Input
-            type="text"
-            name="title"
             id="title"
-            placeholder="أدخل اسم الصنف"
+            name="title"
+            placeholder="أدخل اسم التصنيف"
             required
           />
         </div>
         <div>
-          <Label htmlFor="slug">المعرف الفريد</Label>
+          <Label htmlFor="slug">المُعرف (Slug)</Label>
           <Input
-            type="text"
-            name="slug"
             id="slug"
-            placeholder="ادخل المعرف الفريد"
+            name="slug"
+            placeholder="أدخل المُعرف الخاص بالتصنيف"
             required
+          />
+        </div>
+        <div>
+          <CustomDropzoneUploadImage name="image" title="صورة المنتج" />
+        </div>
+      </div>
+    </AccessibleDialogForm>
+  );
+};
+
+export const UpdateCategoryForm = ({ category }: { category: Category }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <AccessibleDialogForm
+      open={open}
+      setOpen={setOpen}
+      title="تحديث التصنيف"
+      submit="تحديث"
+      action={updateCategoryAction}
+      trigger={<button>تحديث التصنيف</button>}
+    >
+      <Input type="hidden" name="id" value={category.id} readOnly />
+      <div className="grid gap-4">
+        <div>
+          <Label htmlFor="title">اسم التصنيف</Label>
+          <Input
+            id="title"
+            name="title"
+            defaultValue={category.title}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="slug">المُعرف (Slug)</Label>
+          <Input
+            id="slug"
+            name="slug"
+            placeholder="أدخل المُعرف الخاص بالتصنيف"
+            required
+            defaultValue={category.slug}
+          />
+        </div>
+        <div>
+          {/* <Label htmlFor="image">رابط الصورة (اختياري)</Label> */}
+          <CustomDropzoneUploadImage
+            name="image"
+            title="صورة المنتج"
+            defaultImage={category?.image}
           />
         </div>
       </div>
+    </AccessibleDialogForm>
+  );
+};
+
+export const DeleteCategoryForm = ({ id }: { id: string }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <AccessibleDialogForm
+      open={open}
+      setOpen={setOpen}
+      title="حذف التصنيف"
+      submit="حذف"
+      submitVariant="destructive"
+      discardVariant="default"
+      action={deleteCategoryAction}
+      description="هل أنت متأكد من رغبتك في حذف هذا التصنيف؟ لا يمكن التراجع عن هذا الإجراء."
+      trigger={<button>حذف التصنيف</button>}
+    >
+      <Input type="hidden" name="id" value={id} readOnly />
     </AccessibleDialogForm>
   );
 };

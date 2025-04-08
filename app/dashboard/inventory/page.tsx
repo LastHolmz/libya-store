@@ -18,7 +18,7 @@ import { getCategories } from "@/database/categories";
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
   const products = await getProducts({ title: searchParams?.title });
-  const categories = await getCategories();
+  const categories = await getCategories({});
   // await prisma.product.updateMany({
   //   data: {
   //     fakeDiscountRation: 20,

@@ -1,3 +1,5 @@
+"use server";
+
 import { z } from "zod";
 import {
   createCategory,
@@ -5,21 +7,22 @@ import {
   updateCategory,
 } from "@/database/categories";
 
+// Create Category
 export async function createCategoryAction(
   _: { message: string },
   formData: FormData
 ) {
   try {
     const schema = z.object({
-      title: z.string(),
-      slug: z.string(),
-      image: z.string().min(4),
+      title: z.string().min(1, "Title is required"),
+      slug: z.string().min(1, "Slug is required"),
+      image: z.string().nullable().optional(),
     });
 
     const data = schema.safeParse({
-      slug: formData.get("slug") || "",
-      title: formData.get("title") || "",
-      image: formData.get("image") || "",
+      title: formData.get("title"),
+      slug: formData.get("slug"),
+      image: formData.get("image") || null,
     });
 
     if (!data.success) {
@@ -29,39 +32,37 @@ export async function createCategoryAction(
       };
     }
 
-    const { title, image, slug } = data.data;
+    const { title, slug, image } = data.data;
+    if (!image) {
+      return { message: "يجب رفع صورة" };
+    }
 
-    const res = await createCategory({
-      title,
-      image,
-      slug,
-    });
-
-    console.log("User created successfully:", res);
+    const res = await createCategory({ title, slug, image });
     return { message: res.message };
   } catch (error) {
-    console.error("Error in createUserAction:", error);
-    return { message: "فشلت العملية، يرجى المحاولة لاحقاً" };
+    console.error("Error in createCategoryAction:", error);
+    return { message: "Operation failed, please try again later" };
   }
 }
 
-// Action to update a user
+// Update Category
 export async function updateCategoryAction(
   _: { message: string },
   formData: FormData
 ) {
   try {
     const schema = z.object({
-      title: z.string(),
-      id: z.string(),
-
-      image: z.string().min(4),
+      id: z.string().min(1, "Category ID is required"),
+      title: z.string().min(1, "Title is required"),
+      image: z.string().nullable().optional(),
+      slug: z.string().min(1, "Slug is required"),
     });
 
     const data = schema.safeParse({
-      id: formData.get("id") || "",
-      title: formData.get("title") || "",
-      image: formData.get("image") || "",
+      id: formData.get("id"),
+      title: formData.get("title"),
+      image: formData.get("image") || null,
+      slug: formData.get("slug"),
     });
 
     if (!data.success) {
@@ -71,34 +72,32 @@ export async function updateCategoryAction(
       };
     }
 
-    const { id, title, image } = data.data;
+    const { id, title, image, slug } = data.data;
 
-    const res = await updateCategory({
-      id,
-      title,
-      image,
-    });
+    if (!image) {
+      return { message: "يجب رفع صورة" };
+    }
 
-    console.log("User updated successfully:", res);
+    const res = await updateCategory({ id, title, image, slug });
     return { message: res.message };
   } catch (error) {
-    console.error("Error in updateUserAction:", error);
-    return { message: "فشلت العملية، يرجى المحاولة لاحقاً" }; // "The operation failed, please try again later."
+    console.error("Error in updateCategoryAction:", error);
+    return { message: "Operation failed, please try again later" };
   }
 }
 
-// Action to delete a user
+// Delete Category
 export async function deleteCategoryAction(
   _: { message: string },
   formData: FormData
 ) {
   try {
     const schema = z.object({
-      id: z.string().min(1, "معرف المستخدم مطلوب"), // "User ID is required"
+      id: z.string().min(1, "Category ID is required"),
     });
 
     const data = schema.safeParse({
-      id: formData.get("id") || "",
+      id: formData.get("id"),
     });
 
     if (!data.success) {
@@ -111,11 +110,9 @@ export async function deleteCategoryAction(
     const { id } = data.data;
 
     const res = await deleteCategory(id);
-
-    console.log("User deleted successfully:", res);
     return { message: res.message };
   } catch (error) {
-    console.error("Error in deleteUserAction:", error);
-    return { message: "فشلت العملية، يرجى المحاولة لاحقاً" }; // "The operation failed, please try again later."
+    console.error("Error in deleteCategoryAction:", error);
+    return { message: "Operation failed, please try again later" };
   }
 }
