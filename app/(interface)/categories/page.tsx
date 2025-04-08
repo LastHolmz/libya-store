@@ -16,7 +16,7 @@ const page = async () => {
   return (
     <div>
       <Header />
-      <main className="bg-secondary min-h-full">
+      <main className="bg-background min-h-full">
         <Breadcrumb className="container" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>
