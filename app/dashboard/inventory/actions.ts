@@ -79,6 +79,7 @@ export async function addColorToProductAction(
           qty: z.number(),
         })
       ),
+      vanexId: z.coerce.number().optional(),
     });
 
     const data = schema.safeParse({
@@ -87,6 +88,7 @@ export async function addColorToProductAction(
       image: formData.get("image") || "",
       productId: formData.get("productId") || "",
       sizes: JSON.parse((formData.get("sizes") as string) || "[]"),
+      vanexId: formData.get("vanexId") || "",
     });
 
     if (!data.success) {
@@ -96,7 +98,7 @@ export async function addColorToProductAction(
       };
     }
 
-    const { name, color, image, productId, sizes } = data.data;
+    const { name, color, image, productId, sizes, vanexId } = data.data;
 
     const result = await addColorToProduct({
       name,
@@ -104,6 +106,7 @@ export async function addColorToProductAction(
       image: image ?? null,
       productId,
       sizes,
+      vanexId: vanexId ?? null,
     });
 
     return { message: result.message };
@@ -123,6 +126,8 @@ export async function updateColorOfProductAction(
       color: z.string().min(1, "يجب تحديد اللون"),
       image: z.string().optional(),
       productId: z.string(),
+      vanexId: z.coerce.number().optional(),
+
       sizes: z.array(
         z.object({
           title: z.string().nullable(),
@@ -137,6 +142,7 @@ export async function updateColorOfProductAction(
       color: formData.get("color") || "",
       image: formData.get("image") || "",
       productId: formData.get("productId") || "",
+      vanexId: formData.get("vanexId") || "",
       sizes: JSON.parse((formData.get("sizes") as string) || "[]"),
     });
 
@@ -147,7 +153,7 @@ export async function updateColorOfProductAction(
       };
     }
 
-    const { name, color, image, productId, sizes, id } = data.data;
+    const { name, color, image, productId, sizes, id, vanexId } = data.data;
 
     const result = await updateColorOfProduct({
       name,
@@ -156,6 +162,7 @@ export async function updateColorOfProductAction(
       productId,
       sizes,
       id,
+      vanexId: vanexId ?? null,
     });
 
     return { message: result.message };

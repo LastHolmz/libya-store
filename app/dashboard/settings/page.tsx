@@ -1,4 +1,4 @@
-import CategoriesTable from "@/components/reusable-table";
+import PixelsTable from "@/components/reusable-table";
 import { Suspense } from "react";
 import {
   Breadcrumb,
@@ -9,12 +9,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { categoriesTable } from "./components/categories-column";
-import { getCategories } from "@/database/categories";
-import { CreateCategoryForm } from "./components/forms";
+import { pixelsTable } from "./components/pixels-columns";
+import { getPixels } from "@/database/pixels";
+import { CreatePixelForm } from "./components/forms";
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
-  const users = await getCategories({ title: searchParams?.title });
+  const pixels = await getPixels({ title: searchParams?.title });
 
   return (
     <main className="phone-only:px-4">
@@ -34,19 +34,20 @@ const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>ادارة الأصناف</BreadcrumbPage>
+              <BreadcrumbPage>الإعدادات</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <CreateCategoryForm />
+        {/* <CreateUserForm /> */}
+        <CreatePixelForm />
       </div>
       <div className=" my-4 md:container">
         <Suspense fallback={"جاري التحميل"}>
-          <CategoriesTable
+          <PixelsTable
             searchPlaceholder="البحث بالاسم"
-            data={users}
-            columns={categoriesTable}
-            searchQuery="categories"
+            data={pixels}
+            columns={pixelsTable}
+            searchQuery="title"
           />
         </Suspense>
       </div>

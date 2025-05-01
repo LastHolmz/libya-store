@@ -188,6 +188,17 @@ export const AddColorsToProductForm = ({ id }: { id: string }) => {
             />
           </div>
           <div>
+            <Label htmlFor="vanexId">vanex ID</Label>
+            <Input
+              type="number"
+              name="vanexId"
+              id="vanexId"
+              placeholder="أدخل vanex ID"
+              required
+              dir="rtl"
+            />
+          </div>
+          <div>
             <Label htmlFor="sizes">المقاسات</Label>
             <div className="border-foreground/40 border rounded-md p-2 ">
               <div className="grid  grid-cols-2 gap-2">
@@ -261,7 +272,7 @@ export const UpdateColorsOfProductForm = ({
     color: string | null;
     name: string | null;
     image: string | null;
-
+    vanexId: number | null;
     sizes: {
       id: string;
       title: string | null;
@@ -344,6 +355,18 @@ export const UpdateColorsOfProductForm = ({
               required
               dir="rtl"
               defaultValue={colorShceme.color ?? ""}
+            />
+          </div>
+          <div>
+            <Label htmlFor="vanexId">vanex ID</Label>
+            <Input
+              type="number"
+              name="vanexId"
+              id="vanexId"
+              placeholder="أدخل vanex ID"
+              required
+              defaultValue={colorShceme.vanexId ?? ""}
+              dir="rtl"
             />
           </div>
           <div>
@@ -706,7 +729,7 @@ export const AddDescriptionProductForm = ({
     <Form
       success="تم تحديث شرح المنتج"
       replaceLink={`/dashboard/inventory/${id}/description`}
-      submit="إضافة"
+      submitText="إضافة"
       action={addDescriptionProductAction}
       dontReplace
     >
@@ -737,7 +760,7 @@ export default function UpdateConfigForm({
       action={updateConfigAction}
       // success="تم تحديث اعدادات المنتج"
       className="space-y-6 max-w-lg"
-      submit="تحديث"
+      submitText="تحديث"
     >
       {/* SelectType */}
       <Input type="hidden" name="id" value={id} />

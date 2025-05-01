@@ -78,7 +78,15 @@ const deleteReview = async ({ id }: { id: string }) => {
 };
 
 const getReviews = unstable_cache(
-  async ({ comment, productId }: { comment?: string; productId: string }) => {
+  async ({
+    comment,
+    productId,
+    accepted,
+  }: {
+    comment?: string;
+    productId: string;
+    accepted?: boolean;
+  }) => {
     try {
       const reviews = await prisma.review.findMany({
         where: {
@@ -86,6 +94,7 @@ const getReviews = unstable_cache(
           comment: {
             contains: comment,
           },
+          accepted,
         },
         orderBy: {
           rating: "desc",

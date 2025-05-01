@@ -88,7 +88,7 @@ const CartAndBuy = ({
             </button>
           </div>
           <CustomLink
-            href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId?${selectedSize?.id}&qty=${quantity}`}
+            href={`/categories${link}/checking-out?colorId=${currentColor}&sizeId=${selectedSize?.id}&qty=${quantity}`}
             variant={"default"}
             className="md:w-1/2 w-full phone-only:mt-2 rounded-[62px]"
           >

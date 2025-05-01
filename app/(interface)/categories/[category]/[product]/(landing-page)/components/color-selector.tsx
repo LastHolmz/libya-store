@@ -22,6 +22,7 @@ interface Color {
   id: string;
   color: string | null;
   image: string | null;
+  vanexId: number | null;
 }
 
 export interface CustomSize {
@@ -35,16 +36,14 @@ const ColorSelector = ({
   colors,
   sizes,
   link,
-  // buyNow,
   product,
 }: {
   colors: Color[];
   sizes: CustomSize[];
   link: string;
-  // buyNow: boolean;
   product: Product;
 }) => {
-  const { setQueryParam, deleteQueryParam } = useQueryParam();
+  // const { setQueryParam, deleteQueryParam } = useQueryParam();
   const searchParams = useSearchParams();
 
   const [currentColor, setCurrentColor] = useState(
@@ -224,6 +223,7 @@ const ColorSelector = ({
               disabled={number < 1}
             >
               <SelectColor
+                // vanexId={color.vanexId}
                 showType={product.selectType}
                 className={cn(
                   "w-12 h-12  shadow-md flex justify-center items-center",
@@ -309,6 +309,7 @@ const ColorSelector = ({
           sizeName: selectedSize?.title ?? "الافتراضي",
           nameOfColor:
             colors.find((color) => color.id === currentColor)?.name || "",
+          vanexId: colors.find((color) => color.id === currentColor)?.vanexId,
         }}
       />
     </div>

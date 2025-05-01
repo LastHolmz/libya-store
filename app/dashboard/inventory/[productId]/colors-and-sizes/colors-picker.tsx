@@ -17,6 +17,7 @@ const ColorPicker = ({
       color: string | null;
       name: string | null;
       image: string | null;
+      vanexId: number | null;
       sizes: {
         id: string;
         title: string | null;

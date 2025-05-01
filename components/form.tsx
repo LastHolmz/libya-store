@@ -17,8 +17,9 @@ interface Props {
   success?: string;
   replaceLink?: string;
   dontReplace?: boolean;
-  submit?: ReactNode | string;
+  submitText?: ReactNode | string;
   submitClass?: string;
+  onSuccessEvent?: () => void;
 }
 
 const Form = ({
@@ -28,8 +29,9 @@ const Form = ({
   success = "تمت العملية بنجاح",
   replaceLink = "/",
   dontReplace = false,
-  submit = "تم",
+  submitText = "تم",
   submitClass,
+  onSuccessEvent,
 }: Props) => {
   const router = useRouter();
   const [msg, dispatch, pending] = useActionState(action, { message: "" });
@@ -40,6 +42,7 @@ const Form = ({
     toast({ title: msg.message });
 
     if (msg.message === success) {
+      if (onSuccessEvent) onSuccessEvent();
       if (!dontReplace) router.replace(replaceLink);
     }
   }, [msg, success, replaceLink, dontReplace, router]);
@@ -48,7 +51,7 @@ const Form = ({
     <form action={dispatch} className={cn(className)}>
       {children}
       <SubmitButton className={cn(submitClass)} pending={pending}>
-        {submit}
+        {submitText}
       </SubmitButton>
     </form>
   );

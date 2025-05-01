@@ -20,9 +20,10 @@ import { Trash } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
-
+import { FaMinus, FaPlus } from "react-icons/fa6";
+import { CustomLink } from "@/components/custom-link";
 export const CartSheet = () => {
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
 
   return (
     <Sheet>
@@ -34,14 +35,14 @@ export const CartSheet = () => {
           <SheetTitle>سلتك</SheetTitle>
         </SheetHeader>
         <div className="space-y-4 mt-4">
-          <ScrollArea dir="rtl" className="h-[80vh]">
+          <ScrollArea dir="rtl" className="h-[65vh]">
             {cart.length === 0 ? (
               <p>سلتك فارغة.</p>
             ) : (
               <div className="grid gap-2">
                 {cart.map((item, index) => (
                   <Fragment key={index}>
-                    <Card className="border-none">
+                    <Card className="border-none shadow-none">
                       <CardHeader className="flex flex-row justify-between items-start gap-4">
                         <div className="flex flex-row items-center gap-4">
                           <div className="relative w-16 h-16">
@@ -65,46 +66,36 @@ export const CartSheet = () => {
                             </p>
                           </div>
                         </div>
-                        <p className="font-bold text-left text-2xl">
-                          {item.quantity * item.price} دينار
-                        </p>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between">
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() =>
-                              removeFromCart(
-                                item.productId,
-                                item.colorShcemeId,
-                                item.sizeId
-                              )
-                            }
-                          >
-                            إزالة
-                            <Trash />
-                          </Button>{" "}
+                        <div className="flex h-full flex-col justify-between items-end gap-3">
+                          <p className="font-bold text-left text-2xl">
+                            {item.quantity * item.price} دينار
+                          </p>
                           <div className="flex items-center gap-2">
                             <Button
                               variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.productId,
-                                  item.colorShcemeId,
-                                  item.sizeId,
-                                  item.quantity - 1
-                                )
-                              }
-                              disabled={item.quantity <= 1}
+                              size="icon"
+                              onClick={() => {
+                                item.quantity <= 1
+                                  ? removeFromCart(
+                                      item.productId,
+                                      item.colorShcemeId,
+                                      item.sizeId
+                                    )
+                                  : updateQuantity(
+                                      item.productId,
+                                      item.colorShcemeId,
+                                      item.sizeId,
+                                      item.quantity - 1
+                                    );
+                              }}
+                              // disabled={item.quantity <= 1}
                             >
-                              -
+                              {item.quantity <= 1 ? <Trash /> : <FaMinus />}
                             </Button>
                             <span>{item.quantity}</span>
                             <Button
                               variant="outline"
-                              size="sm"
+                              size="icon"
                               onClick={() =>
                                 updateQuantity(
                                   item.productId,
@@ -114,12 +105,12 @@ export const CartSheet = () => {
                                 )
                               }
                             >
-                              +
+                              <FaPlus />
                             </Button>
                           </div>
                         </div>
-                      </CardContent>
-                      {/* <CardFooter></CardFooter> */}
+                      </CardHeader>
+                      {/* <CardContent className="max-h-0"></CardContent> */}
                     </Card>
                     <Separator className="my-1" />
                   </Fragment>
@@ -127,10 +118,21 @@ export const CartSheet = () => {
               </div>
             )}
           </ScrollArea>
-          <div className="flex justify-end">
-            <Button variant="destructive" onClick={clearCart}>
-              إفراغ السلة
-            </Button>
+          <Separator className="my-2" />
+
+          <br />
+
+          <div className="flex justify-between items-center">
+            <p className="font-bold">المجموع:</p>
+            <p className="font-bold">
+              {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}{" "}
+              دينار
+            </p>
+          </div>
+          <div className="flex justify-between items-center">
+            <CustomLink variant="default" href="/checkout" className="w-full">
+              اذهب الى الدفع
+            </CustomLink>
           </div>
         </div>
       </SheetContent>

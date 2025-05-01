@@ -1,5 +1,3 @@
-import CategoriesTable from "@/components/reusable-table";
-import { Suspense } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,12 +7,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { categoriesTable } from "./components/categories-column";
-import { getCategories } from "@/database/categories";
-import { CreateCategoryForm } from "./components/forms";
+import { getAllOrders } from "@/database/orders";
+// import { CreateOrderForm } from "./components/forms";
+import { fetchAllCities } from "@/database/utilties";
+import OrderTable from "./components/table";
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
-  const users = await getCategories({ title: searchParams?.title });
+  const orders = await getAllOrders();
+  const cities = await fetchAllCities();
 
   return (
     <main className="phone-only:px-4">
@@ -34,21 +34,14 @@ const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>ادارة الأصناف</BreadcrumbPage>
+              <BreadcrumbPage>ادارة الفواتير</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <CreateCategoryForm />
+        {/* <CreateOrderForm /> */}
       </div>
       <div className=" my-4 md:container">
-        <Suspense fallback={"جاري التحميل"}>
-          <CategoriesTable
-            searchPlaceholder="البحث بالاسم"
-            data={users}
-            columns={categoriesTable}
-            searchQuery="categories"
-          />
-        </Suspense>
+        <OrderTable cities={cities} orders={orders} subCities={[]} />
       </div>
     </main>
   );

@@ -9,21 +9,24 @@ import {
 import Link from "next/link";
 import { getProductById } from "@/database/products";
 import { notFound } from "next/navigation";
-import ColorPicker from "./colors-picker";
-import ImageCarsouel from "@/components/image-carsouel";
+import { getReviews } from "@/database/reviews";
+import { WriteReviewForm } from "@/app/(interface)/categories/[category]/[product]/(landing-page)/components/forms";
+import { Suspense } from "react";
+import ReusableTable from "@/components/reusable-table";
+import { reviewsTable } from "./components/reviews-column";
 
 const page = async (props: { params: Promise<{ productId: string }> }) => {
   const params = await props.params;
   const productId = params.productId;
   const product = await getProductById(productId);
-
   if (!product) {
     return notFound();
   }
+  const reviews = await getReviews({ productId });
 
   return (
     <main className="phone-only:px-4">
-      <div className="md:container phone-only:px-0">
+      <div className="md:container  min-h-[50vh] phone-only:px-0">
         <Breadcrumb className="my-2" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -53,16 +56,24 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>الألوان والمقاسات</BreadcrumbPage>
+              <BreadcrumbPage>التعليقات</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <section className="my-4 rounded-md shadow-md bg-accent p-1 md:p-4 mih-h-[50vh]">
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="phone-only:text-center md:border-l-foreground/40 flex flex-col justify-between items-start md:border-l">
-              <ColorPicker product={product} />
-            </div>
-            <ImageCarsouel items={product.colorShcemes} />
+        <section className="my-4 relative rounded-md shadow-md bg-accent p-1 md:p-4 min-h-[50vh]">
+          <div className="flex justify-between items-center my-2 phone-only:flex-col">
+            <h1 className="font-bold">التعليقات</h1>
+            <WriteReviewForm productId={productId} />
+          </div>{" "}
+          <div className=" my-4 md:container">
+            <Suspense fallback={"جاري التحميل"}>
+              <ReusableTable
+                searchPlaceholder="البحث بالاسم"
+                data={reviews}
+                columns={reviewsTable}
+                searchQuery="title"
+              />
+            </Suspense>
           </div>
         </section>
       </div>

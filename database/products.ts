@@ -177,6 +177,7 @@ const getProductById = async (id: string) => {
             name: true,
             id: true,
             image: true,
+            vanexId: true,
             sizes: {
               select: {
                 id: true,
@@ -216,6 +217,7 @@ const addColorToProduct = async ({
   name,
   productId,
   sizes,
+  vanexId,
 }: Omit<ColorShceme, "id"> & {
   sizes: { title: string | null; qty: number }[];
 }) => {
@@ -226,6 +228,7 @@ const addColorToProduct = async ({
         image,
         name,
         productId,
+        vanexId,
         sizes: {
           createMany: {
             data: sizes,
@@ -249,6 +252,7 @@ const updateColorOfProduct = async ({
   name,
   sizes,
   id,
+  vanexId,
 }: ColorShceme & {
   sizes: { title: string | null; qty: number }[];
 }) => {
@@ -265,6 +269,7 @@ const updateColorOfProduct = async ({
             data: sizes,
           },
         },
+        vanexId,
       },
     });
     if (!colorScheme) {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FaBars } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { FaRegNewspaper } from "react-icons/fa6";
+import { FaFileInvoice, FaRegNewspaper } from "react-icons/fa6";
 import {
   MdOutlineCategory,
   MdOutlineInventory2,
@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { HiMiniBars2 } from "react-icons/hi2";
 import ToggleTheme from "@/components/theme-toggle";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const NavigationRailItem = ({
   href,
@@ -157,6 +158,22 @@ const NavigationRail = () => {
             name="المخزون"
           />
         </li>
+        <li className="my-2">
+          <NavigationRailItem
+            collapsed={collapsed}
+            href="/dashboard/orders"
+            Icon={FaFileInvoice}
+            name="الطلبيات"
+          />
+        </li>
+        <li className="my-2">
+          <NavigationRailItem
+            collapsed={collapsed}
+            href="/dashboard/settings"
+            Icon={IoSettingsOutline}
+            name="الإعدادات"
+          />
+        </li>
       </Menu>
     </Sidebar>
   );
@@ -206,6 +223,22 @@ export const DashboardNavigation = () => {
                 href="/dashboard/inventory"
                 Icon={MdOutlineInventory2}
                 name="المخزون"
+                onClick={toggleOpen}
+              />
+            </li>
+            <li className="w-full">
+              <NavigationRailItem
+                href="/dashboard/orders"
+                Icon={FaFileInvoice}
+                name="الطلبيات"
+                onClick={toggleOpen}
+              />
+            </li>
+            <li className="w-full">
+              <NavigationRailItem
+                href="/dashboard/settings"
+                Icon={IoSettingsOutline}
+                name="الإعدادات"
                 onClick={toggleOpen}
               />
             </li>

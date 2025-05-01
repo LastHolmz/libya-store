@@ -62,7 +62,7 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage></BreadcrumbPage>
+              <BreadcrumbPage>الإعدادات</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

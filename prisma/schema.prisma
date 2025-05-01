@@ -18,7 +18,7 @@ model User {
     gender      Gender   @default(male)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    orders      Order[]
+    // orders      Order[]
 }
 
 model Product {
@@ -80,9 +80,10 @@ model Brand {
 }
 
 model Size {
-    id            String       @id @default(auto()) @map("_id") @db.ObjectId
-    qty           Int          @default(0)
-    title         String?
+    id    String  @id @default(auto()) @map("_id") @db.ObjectId
+    qty   Int     @default(0)
+    title String?
+
     ColorShceme   ColorShceme? @relation(fields: [colorShcemeId], references: [id], onDelete: Cascade)
     colorShcemeId String?      @db.ObjectId
 }
@@ -93,6 +94,7 @@ model ColorShceme {
     name      String? @default("بلا")
     image     String?
     sizes     Size[]
+    vanexId   Int?
     Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     productId String  @db.ObjectId
 }
@@ -109,22 +111,29 @@ model Extension {
 
 model Order {
     id         String      @id @default(auto()) @map("_id") @db.ObjectId
-    user       User?       @relation(fields: [userId], references: [id])
-    userId     String?     @db.ObjectId
+    fullName   String
+    qty        Int         @default(0)
+    phone      String
+    phoneB     String?
+    address    String //The address associated with the package
+    cityId     Int?
+    subCityId  Int?
     totalPrice Int         @default(0)
     rest       Int         @default(0)
+    map        String?
     orderItems OrderItem[]
     status     OrderStatus @default(pending)
     createdAt  DateTime    @default(now())
     updatedAt  DateTime    @updatedAt
     barcode    String      @unique
+    notes      String?
 }
 
 model OrderItem {
     id          String   @id @default(auto()) @map("_id") @db.ObjectId
     productId   String // ID of the product
     skuId       String // Stock Keeping Unit ID
-    barcode     String // Barcode of the product
+    // barcode     String // Barcode of the product
     qty         Int // Quantity of the item in the cart
     title       String // Title of the product
     image       String // URL of the product image
@@ -132,6 +141,7 @@ model OrderItem {
     hashedColor String? // Optional hashed color code
     price       Float // Price of the item
     nameOfColor String? // Optional name of the color
+    vanexId     Int? // Optional ID for the item in the Vanex system
     createdAt   DateTime @default(now()) // Timestamp for when the item was added to the cart
     updatedAt   DateTime @updatedAt
     order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -148,6 +158,21 @@ model Review {
     updatedAt DateTime @updatedAt
     Product   Product? @relation(fields: [productId], references: [id])
     productId String?  @db.ObjectId
+}
+
+model Pixel {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    title     String
+    value     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model ExternalAuth {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    accessToken String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 enum OrderStatus {

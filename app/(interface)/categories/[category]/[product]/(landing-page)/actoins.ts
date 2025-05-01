@@ -1,13 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import {
-  CreateReview,
-  updateReview,
-  deleteReview,
-  getReviews,
-  getReviewById,
-} from "@/database/reviews";
+import { CreateReview, updateReview, deleteReview } from "@/database/reviews";
 
 export async function createReviewAction(
   _: { message: string },
@@ -90,7 +84,7 @@ export async function updateReviewAction(
       fullName,
       rating,
       comment,
-      accepted: accepted === "true",
+      accepted: accepted === "on",
     });
 
     console.log("Review updated successfully:", res);
@@ -132,23 +126,3 @@ export async function deleteReviewAction(
     return { message: "فشلت العملية، يرجى المحاولة لاحقاً" };
   }
 }
-
-// export async function getReviewsAction(comment?: string) {
-//   try {
-//     const reviews = await getReviews({ comment });
-//     return reviews;
-//   } catch (error) {
-//     console.error("Error in getReviewsAction:", error);
-//     return [];
-//   }
-// }
-
-// export async function getReviewByIdAction(id: string) {
-//   try {
-//     const review = await getReviewById(id);
-//     return review;
-//   } catch (error) {
-//     console.error("Error in getReviewByIdAction:", error);
-//     return undefined;
-//   }
-// }

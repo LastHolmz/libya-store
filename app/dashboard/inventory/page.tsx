@@ -13,19 +13,12 @@ import { productsTable, Props } from "./components/products-column";
 import { CreateProductForm } from "./components/forms";
 import { getProducts } from "@/database/products";
 import { getCategories } from "@/database/categories";
-// import prisma from "@/prisma/db";
 
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
   const products = await getProducts({ title: searchParams?.title });
   const categories = await getCategories({});
-  // await prisma.product.updateMany({
-  //   data: {
-  //     fakeDiscountRation: 20,
-  //     fakeRating: 4.5,
-  //     fakeRatingSelected: false,
-  //   },
-  // });
+
   return (
     <main className="phone-only:px-4">
       <div className="flex md:justify-between  justify-start flex-col  md:flex-row md:items-center md:mx-2 my-2">
