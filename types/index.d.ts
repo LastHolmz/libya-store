@@ -48,6 +48,7 @@ declare interface CartItem {
   image: string; // URL of the product image
   sizeName: string;
   vanexId?: number | null;
+  nameOfSize?: string; // Optional name of the size
 }
 
 declare interface PackageData {
@@ -67,13 +68,13 @@ declare interface PackageData {
   phone: number;
   phone_b: number;
   city: number; // City ID
-  address_child: number; // Sub-city/child address ID
+  address_child?: number; // Sub-city/child address ID
   price: number;
-  sticker_notes: string; // Additional notes related to the package sticker
+  sticker_notes?: string; // Additional notes related to the package sticker
   paid_by: "market" | "customer";
   extra_size_by: "market" | "customer";
   commission_by: "market" | "customer";
-  payment_method: "cash" | "cheque";
+  payment_methode: "cash" | "cheque";
   map: string; // Google Maps URL
   package_sub_type: number; // Always 6
   type_id: number; // Always 1

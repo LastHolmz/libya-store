@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import { getAllOrders } from "@/database/orders";
 // import { CreateOrderForm } from "./components/forms";
-import { fetchAllCities } from "@/database/utilties";
+import { fetchAllCities } from "@/api/utilties";
 import OrderTable from "./components/table";
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
@@ -18,7 +18,7 @@ const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
 
   return (
     <main className="phone-only:px-4">
-      <div className=" flex md:justify-between  justify-start flex-col  md:flex-row md:items-center md:mx-2 my-2">
+      <div className="flex md:justify-between  justify-start flex-col  md:flex-row md:items-center md:mx-2 my-2">
         <Breadcrumb className="my-2" dir="rtl">
           <BreadcrumbList>
             <BreadcrumbItem>

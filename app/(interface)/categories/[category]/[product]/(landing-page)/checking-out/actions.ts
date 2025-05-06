@@ -38,9 +38,12 @@ const checkoutSchema = z.object({
       skuImage: z.string().optional(),
       hashedColor: z.string().optional(),
       nameOfColor: z.string().optional(),
+      nameOfSize: z.string().optional(),
     })
   ),
   totalPrice: z.coerce.number().min(1, "السعر الإجمالي مطلوب"),
+  itemsPrice: z.coerce.number().min(1, "إجمالي سعر المنتجات مطلوب"),
+  deliveryPrice: z.coerce.number().min(1, "سعر التوصيل مطلوب"),
 });
 
 export async function submitOrderAction(
@@ -59,6 +62,8 @@ export async function submitOrderAction(
       subCityId: Number(formData.get("subCity")),
       items: JSON.parse(formData.get("items") as string),
       totalPrice: Number(formData.get("totalPrice")),
+      itemsPrice: Number(formData.get("itemsPrice")),
+      deliveryPrice: Number(formData.get("deliveryPrice")),
     });
 
     // const parsed = checkoutSchema.safeParse(data);
@@ -76,11 +81,13 @@ export async function submitOrderAction(
       phone_b,
       address,
       map,
-      // quantity,
       cityId,
       subCityId,
       items,
       totalPrice,
+      deliveryPrice,
+      itemsPrice,
+      // quantity,
     } = data.data;
 
     const res = await createOrder({
@@ -97,6 +104,8 @@ export async function submitOrderAction(
         totalPrice,
         map,
         phoneB: phone_b,
+        deliveryPrice,
+        itemsPrice,
       },
     });
 

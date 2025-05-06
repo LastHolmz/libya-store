@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s < لوحة التحكم < Our Gym",
   },
 };
-const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
       dir="rtl"

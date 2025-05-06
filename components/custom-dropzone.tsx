@@ -6,9 +6,10 @@ import { Button } from "./ui/button";
 import { MdOutlineCancel } from "react-icons/md";
 import Image from "next/image";
 import { Label } from "./ui/label";
-import { UploadDropzone } from "@/components/upload";
+import { UploadDropzone, UploadButton } from "@/components/upload";
 import { Input } from "./ui/input";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface ImageProps {
   defaultImage?: nullable | string;
@@ -17,7 +18,7 @@ interface ImageProps {
   dropClassName?: string;
 }
 interface PdfProps {
-  defaultPdf?: string;
+  defaultPdf?: string | null | undefined;
   name?: string;
   title?: string;
   dropClassName?: string;
@@ -28,7 +29,8 @@ const CustomDropzoneUploadImage = ({
   name = "image",
   title,
   dropClassName,
-}: ImageProps) => {
+  responsive = false,
+}: ImageProps & { responsive?: boolean }) => {
   const [image, setImage] = useState<string>(defaultImage ?? "");
 
   return (
@@ -63,9 +65,34 @@ const CustomDropzoneUploadImage = ({
       ) : (
         <div className={dropClassName}>
           {title && <Label>رفع {title}</Label>}
+          {responsive && (
+            <UploadButton
+              className="md:hidden w-full"
+              content={{
+                button: `${title}`,
+                allowedContent: "يجب أن لا يتجاوز حجم الصورة 128 ميجابايت",
+              }}
+              config={{
+                appendOnPaste: true,
+                mode: "auto",
+              }}
+              onClientUploadComplete={(res) => {
+                console.log(res);
+                setImage(res[0].url);
+                toast({ title: "تم الرفع بنجاح" });
+              }}
+              onUploadError={(error: Error) => {
+                toast({ title: `ERROR! ${error.message}` });
+              }}
+              endpoint="imageUploader"
+            />
+          )}
           <UploadDropzone
             endpoint="imageUploader"
-            className=" text-white upload-border ut-button:bg-primary/50 ut-button:ut-readying:bg-primary/60 ut-button:ut-uploading:bg-primary/50"
+            className={cn(
+              "text-white  upload-border ut-button:bg-primary/50 ut-button:ut-readying:bg-primary/60 ut-button:ut-uploading:bg-primary/50",
+              responsive && "phone-only:hidden"
+            )}
             appearance={{
               label:
                 "text-black dark:text-white custom-class hover:text-primary",
@@ -115,8 +142,9 @@ const CustomDropzoneUploadPdf = ({
   name = "pdf",
   title,
   dropClassName,
-}: PdfProps) => {
-  const [pdf, setPdf] = useState<string>(defaultPdf);
+  responsive = false,
+}: PdfProps & { responsive?: boolean }) => {
+  const [pdf, setPdf] = useState<string>(defaultPdf ?? "");
 
   return (
     <div>
@@ -138,7 +166,7 @@ const CustomDropzoneUploadPdf = ({
                 <MdOutlineCancel />
               </Button>
               <Image
-                src={"/pdf.png"}
+                src={"/images/pdf.png"}
                 alt="pdf"
                 width={500}
                 height={500}
@@ -150,9 +178,34 @@ const CustomDropzoneUploadPdf = ({
       ) : (
         <div className={dropClassName}>
           {title && <Label>رفع {title}</Label>}
+          {responsive && (
+            <UploadButton
+              className="md:hidden w-full"
+              content={{
+                button: `${title}`,
+                allowedContent: "يجب أن لا يتجاوز حجم الصورة 128 ميجابايت",
+              }}
+              config={{
+                appendOnPaste: true,
+                mode: "auto",
+              }}
+              onClientUploadComplete={(res) => {
+                console.log(res);
+                setPdf(res[0].url);
+                toast({ title: "تم الرفع بنجاح" });
+              }}
+              onUploadError={(error: Error) => {
+                toast({ title: `ERROR! ${error.message}` });
+              }}
+              endpoint="pdfUploader"
+            />
+          )}
           <UploadDropzone
             endpoint="pdfUploader"
-            className=" text-white border-foreground ut-button:bg-primary/50 ut-button:ut-readying:bg-primary/60 ut-button:ut-uploading:bg-primary/50 "
+            className={cn(
+              "text-white upload-border border-foreground ut-button:bg-primary/50 ut-button:ut-readying:bg-primary/60 ut-button:ut-uploading:bg-primary/50",
+              responsive && "phone-only:hidden"
+            )}
             appearance={{
               label:
                 "text-black dark:text-white custom-class hover:text-primary",

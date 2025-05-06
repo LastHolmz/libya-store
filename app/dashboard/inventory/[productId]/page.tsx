@@ -75,46 +75,17 @@ const page = async (props: { params: Promise<{ productId: string }> }) => {
                   <p className="text-base">{product.title}</p>
                 </div>
                 <div className="grid grid-cols-2 text-sm">
+                  <span className="text-foreground/80">السعر</span>
+                  <p className="text-base">{product.price} د.ل</p>
+                </div>
+                <div className="grid grid-cols-2 text-sm">
                   <span className="text-foreground/80">الباركود</span>
                   <p className="text-base">{product.barcode}</p>
                 </div>
-              </div>
-              {/* supplier info */}
-              <div className=" grid gap-4 mt-10">
-                <h3 className="font-semibold  my-4">تفاصيل المورد</h3>
                 <div className="grid grid-cols-2 text-sm">
-                  <span className="text-foreground/80">الالوان</span>
-                  <div className="text-base flex flex-wrap items-center gap-1 w-full">
-                    {product.colorShcemes.map((c, i) => (
-                      <SelectColor showType="colors" {...c} key={i} />
-                    ))}
-                  </div>
-                </div>{" "}
-                <div className="grid grid-cols-2 text-sm">
-                  <span className="text-foreground/80">رقم الهاتف</span>
-                  <p className="text-base">{"0928666458"}</p>
+                  <span className="text-foreground/80">الكمية المتاحة</span>
+                  <p className="text-base">{qty}</p>
                 </div>
-              </div>
-              <div className="mt-10 grid gap-4">
-                <h3 className="font-semibold">مواقع المخزون</h3>
-                <Table>
-                  <TableHeader className="bg-secondary">
-                    <TableRow>
-                      <TableHead>اسم المتجر</TableHead>
-                      <TableHead>المخزون المتوفر</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>فرع طرابلس</TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>فرع بنغازي</TableCell>
-                      <TableCell>29</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
               </div>
             </div>
             <div className="grid phone-only:mt-10 items-center text-center">

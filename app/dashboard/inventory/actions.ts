@@ -90,6 +90,8 @@ export async function addColorToProductAction(
       sizes: JSON.parse((formData.get("sizes") as string) || "[]"),
       vanexId: formData.get("vanexId") || "",
     });
+    // console.log(data.error);
+    // console.log(data.data);
 
     if (!data.success) {
       console.error("Validation errors:", data.error.errors);

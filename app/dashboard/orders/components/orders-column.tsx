@@ -15,6 +15,7 @@ import {
 import { DeleteOrderForm, UpdateOrderForm } from "./forms";
 import { OrdersProps } from "@/types/interfaces";
 import Link from "next/link";
+import { getStatusLabel } from "@/lib/utils";
 
 export function getOrdersTable(
   cities: City[],
@@ -76,14 +77,8 @@ export function getOrdersTable(
       header: "الحالة",
       cell: ({ row }) => {
         const status = row.original?.status;
-        const statusText: Record<string, string> = {
-          pending: "قيد الانتظار",
-          inProgress: "قيد التنفيذ",
-          done: "تم التوصيل",
-          rejected: "مرفوض",
-          refused: "مرفوض من العميل",
-        };
-        return <div>{statusText[status] ?? "غير معروف"}</div>;
+        const statusText = getStatusLabel(status);
+        return <div>{statusText}</div>;
       },
     },
     {
@@ -111,12 +106,14 @@ export function getOrdersTable(
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>الأحداث</DropdownMenuLabel>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <Link href={`/dashboard/orders/${order.id}`}>تفاصيل</Link>
+                <Link className="w-full" href={`/dashboard/orders/${order.id}`}>
+                  تفاصيل
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              {/* <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <UpdateOrderForm order={order} />
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <DeleteOrderForm id={order.id} />
               </DropdownMenuItem>

@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
 import NavigationTabs, { HomeTabLink, TabLink } from "@/components/navigation";
 import { getOrderById } from "@/database/orders";
+import { OrderProvider } from "@/context/OrderContext";
+
 const layout = async ({
   children,
   params,
@@ -21,22 +23,24 @@ const layout = async ({
 
   return (
     <main className="phone-only:px-4">
-      <NavigationTabs className="my-1">
-        <HomeTabLink
-          href={`/dashboard/orders/${order.id}`}
-          content="التفاصيل"
-        />
-        <TabLink
-          href={`/dashboard/orders/${order.id}/edit`}
-          content="تعديل الطلب"
-        />
+      <OrderProvider>
+        <NavigationTabs className="my-1">
+          <HomeTabLink
+            href={`/dashboard/orders/${order.id}`}
+            content="التفاصيل"
+          />
+          <TabLink
+            href={`/dashboard/orders/${order.id}/edit`}
+            content="تعديل الطلب"
+          />
 
-        <TabLink
-          href={`/dashboard/orders/${order.id}/convert-and-vanex`}
-          content="تحويل إلى فانيكس"
-        />
-      </NavigationTabs>
-      <div>{children}</div>
+          <TabLink
+            href={`/dashboard/orders/${order.id}/convert-to-vanex`}
+            content="تحويل إلى فانيكس"
+          />
+        </NavigationTabs>
+        <div>{children}</div>
+      </OrderProvider>
     </main>
   );
 };

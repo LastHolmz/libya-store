@@ -80,10 +80,9 @@ model Brand {
 }
 
 model Size {
-    id    String  @id @default(auto()) @map("_id") @db.ObjectId
-    qty   Int     @default(0)
-    title String?
-
+    id            String       @id @default(auto()) @map("_id") @db.ObjectId
+    qty           Int          @default(0)
+    title         String?
     ColorShceme   ColorShceme? @relation(fields: [colorShcemeId], references: [id], onDelete: Cascade)
     colorShcemeId String?      @db.ObjectId
 }
@@ -110,23 +109,26 @@ model Extension {
 }
 
 model Order {
-    id         String      @id @default(auto()) @map("_id") @db.ObjectId
-    fullName   String
-    qty        Int         @default(0)
-    phone      String
-    phoneB     String?
-    address    String //The address associated with the package
-    cityId     Int?
-    subCityId  Int?
-    totalPrice Int         @default(0)
-    rest       Int         @default(0)
-    map        String?
-    orderItems OrderItem[]
-    status     OrderStatus @default(pending)
-    createdAt  DateTime    @default(now())
-    updatedAt  DateTime    @updatedAt
-    barcode    String      @unique
-    notes      String?
+    id               String      @id @default(auto()) @map("_id") @db.ObjectId
+    fullName         String
+    qty              Int         @default(0)
+    phone            String
+    phoneB           String?
+    address          String //The address associated with the package
+    cityId           Int?
+    subCityId        Int?
+    totalPrice       Int         @default(0)
+    itemsPrice       Int         @default(0)
+    deliveryPrice    Int         @default(0)
+    rest             Int         @default(0)
+    map              String?
+    orderItems       OrderItem[]
+    status           OrderStatus @default(pending)
+    createdAt        DateTime    @default(now())
+    updatedAt        DateTime    @updatedAt
+    barcode          String      @unique
+    notes            String?
+    vanexPackageCode String?
 }
 
 model OrderItem {
@@ -141,6 +143,7 @@ model OrderItem {
     hashedColor String? // Optional hashed color code
     price       Float // Price of the item
     nameOfColor String? // Optional name of the color
+    nameOfSize  String? // Optional name of the size
     vanexId     Int? // Optional ID for the item in the Vanex system
     createdAt   DateTime @default(now()) // Timestamp for when the item was added to the cart
     updatedAt   DateTime @updatedAt

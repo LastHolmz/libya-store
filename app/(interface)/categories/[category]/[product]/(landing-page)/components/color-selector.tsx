@@ -310,6 +310,7 @@ const ColorSelector = ({
           nameOfColor:
             colors.find((color) => color.id === currentColor)?.name || "",
           vanexId: colors.find((color) => color.id === currentColor)?.vanexId,
+          nameOfSize: selectedSize?.title || "الافتراضي",
         }}
       />
     </div>

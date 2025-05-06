@@ -1,15 +1,7 @@
 import React, { ReactNode } from "react";
-import Header from "./components/header";
 import { CartProvider } from "@/context/CartContext";
 
-const layout = async ({
-  children,
-}: // searchParams,
-{
-  children: ReactNode;
-  // searchParams?: Promise<{ header?: string }>;
-}) => {
-  // const header = (await searchParams)?.header;
+const layout = async ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <CartProvider>{children}</CartProvider>

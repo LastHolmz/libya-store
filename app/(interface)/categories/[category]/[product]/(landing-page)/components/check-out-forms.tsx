@@ -93,6 +93,7 @@ const CheckOutForm = ({
     skuImage: item.image,
     title: item.title,
     vanexId: item.vanexId ?? 0,
+    nameOfSize: item.nameOfSize ?? "",
   }));
 
   const { category } = useParams();
@@ -171,6 +172,9 @@ const CheckOutForm = ({
         className="bg-secondary rounded-3xl shadow-lg min-h-[75vh] my-10 md:w-[75%] mx-auto grid grid-cols-2 phone-only:grid-cols-1 py-10 px-4"
       >
         <div>
+          <Input type="hidden" name="qty" value={quantity} />
+          <Input type="hidden" name="itemsPrice" value={subtotal} />
+          <Input type="hidden" name="deliveryPrice" value={deliveryCost} />
           <Input type="hidden" name="items" value={JSON.stringify(items)} />
           <div className="grid gap-5">
             <div>
@@ -180,7 +184,7 @@ const CheckOutForm = ({
                 name="fullName"
                 placeholder="أدخل اسمك"
                 required
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل اسمك هنا
@@ -194,7 +198,7 @@ const CheckOutForm = ({
                 name="phone"
                 placeholder="أدخل رقم الهاتف"
                 required
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل رقم الهاتف هنا
@@ -207,7 +211,7 @@ const CheckOutForm = ({
                 id="phone_b"
                 name="phone_b"
                 placeholder="أدخل رقم الهاتف الاحتياطي"
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل رقم الهاتف الاحتياطي هنا
@@ -221,7 +225,7 @@ const CheckOutForm = ({
                 name="address"
                 placeholder="أدخل موقعك"
                 required
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل موقعك هنا
@@ -236,7 +240,10 @@ const CheckOutForm = ({
                 dir="rtl"
                 name="city"
               >
-                <SelectTrigger id="city" className="md:max-w-sm">
+                <SelectTrigger
+                  id="city"
+                  className="md:max-w-sm dark:border-foreground/20"
+                >
                   <SelectValue placeholder="المدن" />
                 </SelectTrigger>
                 <SelectContent>
@@ -262,7 +269,10 @@ const CheckOutForm = ({
                   dir="rtl"
                   name="subCity"
                 >
-                  <SelectTrigger id="subCity" className="md:max-w-sm">
+                  <SelectTrigger
+                    id="subCity"
+                    className="md:max-w-sm dark:border-foreground/20"
+                  >
                     <SelectValue placeholder="المناطق" />
                   </SelectTrigger>
                   <SelectContent>
@@ -286,7 +296,7 @@ const CheckOutForm = ({
                 id="map"
                 name="map"
                 placeholder="أدخل رابط خريطة قوقل"
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل رابط خريطة قوقل هنا
@@ -311,7 +321,7 @@ const CheckOutForm = ({
                   )
                 }
                 placeholder="يمكنك تعديل الكمية هنا"
-                className="max-w-sm"
+                className="max-w-sm dark:border-foreground/20"
               />
               <span className="text-xs text-foreground/80 mt-1">
                 ادخل الكمية هنا

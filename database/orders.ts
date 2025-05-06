@@ -2,6 +2,7 @@ import { unstable_cache, revalidateTag } from "next/cache";
 import type { CreateOrderInput, UpdateOrderInput } from "@/types/interfaces";
 import prisma from "@/prisma/db";
 import { generateUniqueBarcode } from "@/lib/barcode";
+import { OrderStatus } from "@prisma/client";
 
 export const getAllOrders = unstable_cache(
   async () => {
@@ -55,6 +56,8 @@ export const createOrder = async ({
           status: data.status,
           barcode,
           fullName: data.fullName,
+          itemsPrice: data.itemsPrice,
+          deliveryPrice: data.deliveryPrice,
         },
       });
 
@@ -74,9 +77,11 @@ export const createOrder = async ({
   }
 };
 
-export const updateOrder = async (
-  data: UpdateOrderInput
-): Promise<{ message: string }> => {
+export const updateOrder = async ({
+  data,
+}: {
+  data: UpdateOrderInput;
+}): Promise<{ message: string }> => {
   try {
     const { id, items, ...orderData } = data;
 

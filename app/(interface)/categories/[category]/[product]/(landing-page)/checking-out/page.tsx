@@ -3,7 +3,7 @@ import { getProductById } from "@/database/products";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import CheckOutForm from "../components/check-out-forms";
-import { fetchAllCities, fetchSubCitiesByCityId } from "@/database/utilties";
+import { fetchAllCities, fetchSubCitiesByCityId } from "@/api/utilties";
 
 const page = async ({
   searchParams,
