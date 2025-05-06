@@ -26,7 +26,9 @@ const dashboardPage = async () => {
       </Breadcrumb>
       <h1 className="font-bold text-right text-2xl">لوحة التحكم</h1>
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:gap-3 md:gap-2 gap-1 lg:gap-4 my-4 sm:grid-cols-2"></div>
-      <div></div>
+      <div>
+        <p></p>
+      </div>
     </main>
   );
 };
