@@ -328,22 +328,22 @@ export async function createPackageAction(
     const { orderId, ...restData } = data;
     console.log(data);
 
-    // const res = await createPackage({
-    //   data: {
-    //     ...restData,
-    //     products: products,
-    //     type: 1,
-    //     type_id: 1,
-    //     package_sub_type: 6,
-    //     map: data?.map ?? "",
-    //     payment_methode: data.payment_method,
-    //     phone: Number(`218${data.phone}`),
-    //     phone_b: Number(`218${data.phone_b}`),
-    //     breakable: data.breakable ? 1 : 0,
-    //   },
-    //   orderId: data.orderId,
-    // });
-    return { message: "res.message" };
+    const res = await createPackage({
+      data: {
+        ...restData,
+        products: products,
+        type: 1,
+        type_id: 1,
+        package_sub_type: 6,
+        map: data?.map ?? "",
+        payment_methode: data.payment_method,
+        phone: Number(`218${data.phone}`),
+        phone_b: Number(`218${data.phone_b}`),
+        breakable: data.breakable ? 1 : 0,
+      },
+      orderId: data.orderId,
+    });
+    return { message: res.message };
   } catch (error) {
     return { message: "فشلت العملية" };
   }

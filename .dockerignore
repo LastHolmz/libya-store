@@ -1,0 +1,21 @@
+.git
+.gitignore
+
+
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+
+node_modules
+
+dist
+build
+*.log
+
+.next
+# .env*.local
+# .next/cache
+
+old.md
+host.md

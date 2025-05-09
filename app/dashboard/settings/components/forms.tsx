@@ -9,8 +9,10 @@ import {
   createPixelAction,
   updatePixelAction,
   deletePixelAction,
+  createTokenAction,
 } from "../actions";
 import { Pixel } from "@prisma/client";
+import { Eye, EyeOff } from "lucide-react";
 
 export const CreatePixelForm = () => {
   const [open, setOpen] = useState(false);
@@ -22,7 +24,7 @@ export const CreatePixelForm = () => {
       title="إضافة بكسل جديد"
       submit="إضافة"
       action={createPixelAction}
-      trigger={<Button>إضافة بكسل جديد</Button>}
+      trigger={<Button>بكسل جديد</Button>}
     >
       <div className="grid gap-4">
         <div>
@@ -91,6 +93,57 @@ export const DeletePixelForm = ({ id }: { id: string }) => {
       trigger={<button>حذف البكسل</button>}
     >
       <Input type="hidden" name="id" value={id} readOnly />
+    </AccessibleDialogForm>
+  );
+};
+export const AssignNewTokenForm = () => {
+  const [open, setOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <AccessibleDialogForm
+      open={open}
+      setOpen={setOpen}
+      title="اضافة توكن جديد"
+      submit="إنشاء"
+      // submitVariant="destructive"
+      discardVariant="destructive"
+      action={createTokenAction}
+      description="هل أنت متأكد من رغبتك في انشاء توكن جديد؟"
+      trigger={<Button variant={"outline"}>توكن جديد</Button>}
+    >
+      <div className="grid gap-4 mb-2">
+        <div>
+          <Label htmlFor="email">عنوان البريد</Label>
+          <Input
+            id="email"
+            name="email"
+            placeholder="أدخل عنوان البريد"
+            required
+            type="email"
+          />
+        </div>
+        <div className="w-96 mx-auto">
+          <Label htmlFor="pass" className="text-sm font-normal">
+            كلمة السر
+          </Label>
+          <div className="relative mt-1">
+            <Input
+              type={isVisible ? "text" : "password"}
+              id="pass"
+              name="password"
+              placeholder="ادخل كلمة السر"
+              className="bg-background w-full"
+            />
+            <div
+              className="absolute top-2 left-4 text-2xl text-gray-500 cursor-pointer"
+              onClick={() => setIsVisible((prev) => !prev)}
+            >
+              {isVisible ? <Eye size={22} /> : <EyeOff size={22} />}
+            </div>
+          </div>
+        </div>
+      </div>
     </AccessibleDialogForm>
   );
 };

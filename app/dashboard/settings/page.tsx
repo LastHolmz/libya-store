@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { pixelsTable } from "./components/pixels-columns";
 import { getPixels } from "@/database/pixels";
-import { CreatePixelForm } from "./components/forms";
+import { AssignNewTokenForm, CreatePixelForm } from "./components/forms";
 const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
   const searchParams = await props.searchParams;
   const pixels = await getPixels({ title: searchParams?.title });
@@ -39,7 +39,10 @@ const page = async (props: { searchParams: Promise<{ title?: string }> }) => {
           </BreadcrumbList>
         </Breadcrumb>
         {/* <CreateUserForm /> */}
-        <CreatePixelForm />
+        <div className="flex justify-between items-center gap-2">
+          <AssignNewTokenForm />
+          <CreatePixelForm />
+        </div>
       </div>
       <div className=" my-4 md:container">
         <Suspense fallback={"جاري التحميل"}>

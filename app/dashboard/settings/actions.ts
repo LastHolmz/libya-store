@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createPixel, deletePixel, updatePixel } from "@/database/pixels";
+import { assignToken } from "@/api/auth";
 
 // Create Pixel
 export async function createPixelAction(
@@ -98,6 +99,41 @@ export async function deletePixelAction(
     return { message: res.message };
   } catch (error) {
     console.error("Error in deletePixelAction:", error);
+    return { message: "فشلت العملية، حاول لاحقًا" };
+  }
+}
+
+export async function createTokenAction(
+  _: { message: string },
+  formData: FormData
+) {
+  try {
+    const schema = z.object({
+      email: z
+        .string()
+        .min(1, "البريد الإلكتروني مطلوب")
+        .email("البريد الإلكتروني غير صالح"),
+      password: z.string().min(1, "كلمة المرور مطلوبة"),
+    });
+
+    const data = schema.safeParse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+    });
+
+    if (!data.success) {
+      console.error("Validation errors:", data.error.errors);
+      return {
+        message: data.error.errors.map((err) => err.message).join(", "),
+      };
+    }
+
+    const { email, password } = data.data;
+    const res = await assignToken({ email, password });
+
+    return { message: res.message };
+  } catch (error) {
+    console.error("Error in createPixelAction:", error);
     return { message: "فشلت العملية، حاول لاحقًا" };
   }
 }

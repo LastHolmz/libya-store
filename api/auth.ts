@@ -9,8 +9,8 @@ const assignToken = async ({
   email,
   password,
 }: {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }): Promise<{ message: string }> => {
   try {
     const response = await fetch(`${Constant.BASE_URL}/authenticate`, {
@@ -19,8 +19,8 @@ const assignToken = async ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: Constant.EMAIL,
-        password: Constant.PASSWORD,
+        email: email ? email : Constant.EMAIL,
+        password: password ? password : Constant.PASSWORD,
       }),
     });
 
